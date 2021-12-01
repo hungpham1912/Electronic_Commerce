@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+import { UsersModule } from './users/users.module';
+import { OderModule } from './oders/oder.module';
 
 
 @Module({
-  imports: [],
-  controllers: [],
-  providers: [],
+  imports: [ OderModule, UsersModule],
+  
 })
 export class AppModule {}
