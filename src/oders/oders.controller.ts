@@ -6,5 +6,6 @@ export class OdersController {
     constructor(private readonly OderMethod: OdersService) { }
     @Get()
     private async get(){
+        
     }
 }
