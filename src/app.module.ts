@@ -5,8 +5,6 @@ import { AuthModule } from './auth/auth.module';
 
 
 @Module({
-  imports: [ OderModule,AuthModule, UsersModule],
-  // controllers: [AppController],
-  
+  imports: [ OderModule,AuthModule, UsersModule],  
 })
 export class AppModule {}
