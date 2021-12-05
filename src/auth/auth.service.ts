@@ -8,8 +8,8 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.usersService.findOne(email);
     switch (true) {
       case (user == null): return { error: 404, };
       case ((user != null) && (user.password != password)): return { error: 401, };
@@ -20,5 +20,8 @@ export class AuthService {
       }
     }
   }
+
+  
+
 
 }

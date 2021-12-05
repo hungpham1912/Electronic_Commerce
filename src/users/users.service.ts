@@ -34,4 +34,17 @@ export class UsersService {
     }
   }
 
+  async athenticationSignup(infomationSignup: any){
+    const emailExist = await this.userRepository.findOne({ where: { email: infomationSignup.email } });
+    if(emailExist==null){
+      console.log(1)
+    }
+    else{
+      console.log("2")
+    }
+  }
+
+
+
+
 }
