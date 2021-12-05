@@ -2,17 +2,13 @@ import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common
 import { Repository } from 'typeorm';
 import { User } from './entity/users.entity';
 import "reflect-metadata";
-// import { JwtService } from '@nestjs/jwt';
 
-import { use } from 'passport';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
-    // private readonly jwtService: JwtService
-
   ) { }
 
   public async getAll(): Promise<User[]> {

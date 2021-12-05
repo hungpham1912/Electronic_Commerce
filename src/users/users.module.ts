@@ -6,7 +6,6 @@ import { DatabaseModule } from '../database/database.module';
 import { OderModule } from '../oders/oder.module';
 import { JwtModule } from "@nestjs/jwt";
 import { LoggerMiddleware } from '../middleware/logger.middleware';
-import * as dotenv from 'dotenv'
 
 
 @Module({
