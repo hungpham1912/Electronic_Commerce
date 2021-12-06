@@ -5,10 +5,14 @@ import { userProviders } from './entity/user.providers';
 import { DatabaseModule } from '../database/database.module';
 import { OderModule } from '../oders/oder.module';
 import { LoggerMiddleware } from '../middleware/logger.middleware';
-import { SignupMiddleware } from "../middleware/signup.middleware";
+import { ConfigModule } from '@nestjs/config';
+import { SendGridModule } from "@anchan828/nest-sendgrid";
+
 
 @Module({
-  imports: [DatabaseModule, OderModule,],
+  imports: [DatabaseModule, OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
+    apikey: process.env.SEND_GRID_ACCESS_KEY
+  })],
   controllers: [UsersController],
   providers: [
     ...userProviders,

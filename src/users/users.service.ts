@@ -1,6 +1,8 @@
 import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entity/users.entity';
+import { SendGridService } from '@anchan828/nest-sendgrid';
+
 import "reflect-metadata";
 
 
@@ -9,6 +11,7 @@ export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
+    private readonly sendGrid: SendGridService
   ) { }
 
   public async getAll(): Promise<User[]> {
@@ -30,14 +33,22 @@ export class UsersService {
       return User;
     }
     else {
-      console.log("2");
+      return null;
     }
   }
 
+
   async athenticationSignup(infomationSignup: any){
-    const emailExist = await this.userRepository.findOne({ where: { email: infomationSignup.email } });
+    const emailExist = await this.userRepository.find({ where: { email: infomationSignup.email } });
     if(emailExist==null){
-      console.log(1)
+      await this.sendGrid.send({
+        to: infomationSignup.email,
+        from: process.env.FROM_EMAIL,
+        subject:"User Created",
+        text: `Hello ${infomationSignup.name}, your user created with success`,
+        html: `<strong>Hello ${infomationSignup.name}, your user created with success</strong>`
+      })
+      return 
     }
     else{
       console.log("2")
