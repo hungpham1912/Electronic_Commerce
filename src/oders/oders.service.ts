@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import {Oders } from './entity/oders.entity';
+import {Oders } from './oders.entity';
 import "reflect-metadata";
 @Injectable()
 export class OdersService {

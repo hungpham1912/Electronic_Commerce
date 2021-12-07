@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './entity/users.entity';
+import { User } from './users.entity';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { EmailService } from '../email/email.service';
 import "reflect-metadata";
