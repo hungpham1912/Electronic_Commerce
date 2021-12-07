@@ -7,7 +7,9 @@ dotenv.config();
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly UserMethod: UsersService) {}
+    constructor(
+        private readonly UserMethod: UsersService,
+    ) { }
 
     @Post('signin')
     @UseGuards(LocalAuthGuard)
@@ -15,9 +17,8 @@ export class UsersController {
         return req.user;
     }
 
-
     @Post('signup')
-    serverRequestSignup(@Body() infomationSignup: any ){
+    serverRequestSignup(@Body() infomationSignup: any) {
         return this.UserMethod.athenticationSignup(infomationSignup);
     }
 
@@ -25,7 +26,5 @@ export class UsersController {
     myEnforcement() {
         return "Content in here..."
     }
-
-    
 
 }
