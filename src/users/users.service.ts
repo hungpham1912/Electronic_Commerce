@@ -1,6 +1,8 @@
 import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entity/users.entity';
+import { SendGridService } from '@anchan828/nest-sendgrid';
+import { EmailService } from '../email/email.service';
 import "reflect-metadata";
 
 
@@ -9,11 +11,9 @@ export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
+    private readonly sendGrid: SendGridService,
+    private readonly emailService: EmailService
   ) { }
-
-  public async getAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
 
   async findOne(username: string) {
     const as = await this.userRepository.find({ where: { email: username } });
@@ -29,9 +29,12 @@ export class UsersService {
       }
       return User;
     }
-    else {
-      console.log("2");
-    }
+    else return null;
   }
 
+  async athenticationSignup(infomationSignup: any) {
+    const emailExist = await this.userRepository.findOne({ where: { email: infomationSignup.email } });
+    if (emailExist == null) return this.emailService.sendEmail(infomationSignup)
+    else return { error: 403, status: "Account alredy exist!!" }
+  }
 }

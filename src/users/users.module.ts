@@ -4,24 +4,31 @@ import { UsersService } from './users.service';
 import { userProviders } from './entity/user.providers';
 import { DatabaseModule } from '../database/database.module';
 import { OderModule } from '../oders/oder.module';
-import { JwtModule } from "@nestjs/jwt";
 import { LoggerMiddleware } from '../middleware/logger.middleware';
+import { ConfigModule } from '@nestjs/config';
+import { SendGridModule } from "@anchan828/nest-sendgrid";
+import { EmailModule } from '../email/email.module';
 
 
 @Module({
-  imports: [DatabaseModule, OderModule,],
+  imports: [DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
+    apikey: process.env.SEND_GRID_ACCESS_KEY
+  })],
   controllers: [UsersController],
   providers: [
     ...userProviders,
     UsersService,],
   exports: [UsersService],
-
 })
 
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes({ path: 'users/*', method: RequestMethod.GET });
+      .forRoutes(
+        { path: 'users/authorization', method: RequestMethod.GET },
+      );
   }
+
+
 }
