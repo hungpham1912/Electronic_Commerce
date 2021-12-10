@@ -13,7 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]),DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
+  imports: [DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
     apikey: process.env.SEND_GRID_ACCESS_KEY
   })],
   controllers: [UsersController],

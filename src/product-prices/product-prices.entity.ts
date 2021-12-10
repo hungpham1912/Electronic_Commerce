@@ -16,7 +16,7 @@ export   class ProductPrices{
     nameProductPrice: string;
 
     @Column()
-    price: number;
+    price: string;
 
     @ManyToOne(type => Stores, stores => stores.id)
     Stores: Stores

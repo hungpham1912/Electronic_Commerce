@@ -22,7 +22,6 @@ export class UsersController {
         return this.userService.athenticationSignup(infomationSignup);
     }
 
-    
     @Get('authorization')
     myEnforcement() {
         return "Content in here..."

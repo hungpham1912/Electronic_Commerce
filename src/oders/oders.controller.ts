@@ -8,5 +8,4 @@ export class OdersController {
     getCart(@Param() param ){
         return this.OderMethod.get_Cart(param.userId);
     }
-    
 }

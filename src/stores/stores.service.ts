@@ -5,12 +5,17 @@ import { Stores } from "./stores.entity";
 export class StoresService {
     constructor(
         @Inject('STORES_REPOSITORY')
-        private ProducRepository: Repository<Stores>,
+        private StoresRepository: Repository<Stores>,
     ){}
 
-    async find_by_storeId(id: any){
-        const as = await this.ProducRepository.find({where:{id:id}});
+    async findAll(){
+        return this.StoresRepository.find();
+    }
+
+    async findByStoreId(id: any){
+        const as = await this.StoresRepository.findOne(id);
         return as;
     }
+     
 
 }

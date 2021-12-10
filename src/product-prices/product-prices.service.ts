@@ -1,6 +1,7 @@
 import { Injectable, Inject} from '@nestjs/common';
 import { ProductPrices } from './product-prices.entity';
 import { Repository } from 'typeorm';
+import { OderItems } from "../oder-items/oder-items.entity";
 
 @Injectable()
 export class ProductPricesService {
@@ -10,8 +11,9 @@ export class ProductPricesService {
 
     ){}
     
-    async find_by_producPriceId(id: any){
-        const as = await this.ProducPriceRepository.find({where:{id:id}});
+    async find_by_producPriceId(oderItem: OderItems){
+
+        const as = await this.ProducPriceRepository.findOne(oderItem.Product_Prices);
         return as;
     }
 

@@ -14,6 +14,7 @@ export class EmailService {
             text: `Hello ${infomationSignup.name}, your user created with success`,
             html: `<button onclick="confirm()">Confirm</button>
             <script>
+            
             </script>
             `
         })
