@@ -1,9 +1,9 @@
 import { Connection } from 'typeorm';
 import { OderItems } from './oder-items.entity';
 
-export const odersProviders = [
+export const OderItemProviders = [
   {
-    provide: 'ODERITEMS_REPOSITORY',
+    provide: 'ODERSITEMS_REPOSITORY',
     useFactory: (connection: Connection) => connection.getRepository(OderItems),
     inject: ['DATABASE_CONNECTION'],
   },

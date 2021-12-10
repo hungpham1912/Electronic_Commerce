@@ -1,4 +1,18 @@
-import { Injectable } from '@nestjs/common';
-
+import { Injectable,Inject } from '@nestjs/common';
+import { OderItems } from './oder-items.entity';
+import { Repository } from 'typeorm';
 @Injectable()
-export class OderItemsService {}
+export class OderItemsService {
+    constructor(
+        @Inject('ODERSITEMS_REPOSITORY')
+        private oderItemsRepository: Repository<OderItems>,
+    ) { }
+
+    
+
+    async find_by_orderItemId(id: number){
+        const as = await this.oderItemsRepository.find({where:{Oder:id}});
+        return as;
+    }
+
+}

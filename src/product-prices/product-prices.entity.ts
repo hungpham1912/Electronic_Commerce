@@ -13,7 +13,7 @@ export   class ProductPrices{
     id: number;
 
     @Column()
-    name: string;
+    nameProductPrice: string;
 
     @Column()
     price: number;

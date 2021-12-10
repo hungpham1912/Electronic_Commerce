@@ -4,8 +4,9 @@ import {OdersService} from './oders.service'
 @Controller('oders')
 export class OdersController {
     constructor(private readonly OderMethod: OdersService) { }
-    @Get()
-    private async get(){
-        
+    @Get('/cart/:userId')
+    getCart(@Param() param ){
+        return this.OderMethod.get_Cart(param.userId);
     }
+    
 }

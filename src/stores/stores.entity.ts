@@ -9,7 +9,7 @@ export   class Stores{
     id: number;
 
     @Column()
-    name: string;
+    nameStore: string;
 
     @Column()
     adress: number;   

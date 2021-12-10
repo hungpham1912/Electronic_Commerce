@@ -8,10 +8,12 @@ import { LoggerMiddleware } from '../middleware/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { SendGridModule } from "@anchan828/nest-sendgrid";
 import { EmailModule } from '../email/email.module';
+import { User } from "./users.entity";
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
-  imports: [DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
+  imports: [TypeOrmModule.forFeature([User]),DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
     apikey: process.env.SEND_GRID_ACCESS_KEY
   })],
   controllers: [UsersController],

@@ -1,6 +1,7 @@
-import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common';
+import { Injectable, HttpException, Inject, ConsoleLogger} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { EmailService } from '../email/email.service';
 import "reflect-metadata";
@@ -9,7 +10,7 @@ import "reflect-metadata";
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject('USER_REPOSITORY')
+    @InjectRepository(User)
     private userRepository: Repository<User>,
     private readonly sendGrid: SendGridService,
     private readonly emailService: EmailService
