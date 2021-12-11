@@ -1,12 +1,12 @@
+import { Entity } from "typeorm";
 
+@Entity()
 export class CartItemsDto {
  
   nameProduct: string;
 
   price: string;
  
-  status: string;
-
   nameStore: string;
   
   addressStore: string;

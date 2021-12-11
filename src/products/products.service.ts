@@ -8,7 +8,7 @@ export class ProductsService {
         private ProducRepository: Repository<Product>,
     ){}
 
-    async find_by_producId(id: any){
+    async findProductByProducId(id: any){
         const as = await this.ProducRepository.findOne(id);
         return as;
     }

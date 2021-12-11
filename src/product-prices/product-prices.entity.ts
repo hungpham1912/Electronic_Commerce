@@ -18,11 +18,18 @@ export   class ProductPrices{
     @Column()
     price: string;
 
+    @Column()
+    storesId: number;
+
+    @Column()
+    productId: number;
+
+
     @ManyToOne(type => Stores, stores => stores.id)
     Stores: Stores
 
-    @OneToMany(type =>OderItems, oder_items => oder_items.id)
-    oder_Items: OderItems
+    @OneToMany(type =>OderItems, oder_items => oder_items.productPrices)
+    oder_Items: OderItems[]
 
     @ManyToOne(type => Product, product => product.id)
     product: Product

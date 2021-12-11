@@ -18,7 +18,11 @@ export class StoresService {
     }
 
     async saveStore(Store: any){
-        const as = await this.StoresRepository.save(Store);
+        const as = await this.StoresRepository
+        .createQueryBuilder()
+        .insert()
+        .values({ ...Store})
+        .execute();
         return {statusCode: 200,message: 'Ok'}
     }
     

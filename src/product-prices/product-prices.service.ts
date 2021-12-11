@@ -6,14 +6,19 @@ import { OderItems } from "../oder-items/oder-items.entity";
 @Injectable()
 export class ProductPricesService {
     constructor(
-        @Inject('PRODUCTPRICES_REPOSITORY')
+       
+ @Inject('PRODUCTPRICES_REPOSITORY')
         private ProducPriceRepository: Repository<ProductPrices>,
-
     ){}
     
-    async find_by_producPriceId(oderItem: OderItems){
-     
-        const as = await this.ProducPriceRepository.findOne({where:{id:null}});
+    async findByProducPriceById(productPricesId: number){
+        const as = await this.ProducPriceRepository
+        .createQueryBuilder()
+        .select('product_prices')
+        .from(ProductPrices,'product_prices')
+        .where(`product_prices.id = ${productPricesId}`)
+        .getOne();
+
         // const as = await this.ProducPriceRepository.createQueryBuilder('ProductPrices')
         // .leftJoinAndSelect("OderItems.productPrices","ProductPrices")
         // .where("ProductPrices.id = :id", { id })

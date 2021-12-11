@@ -12,14 +12,18 @@ export class OderItemsService {
         
     }
 
-    async findByProductPriceId(id: number){
-        const as = await this.oderItemsRepository.find({where:{productPrices:id}});
-        return as;
-    }
+    // async findOderItemsByOrderId(id: number){
+    //     const as = await this.oderItemsRepository.find({where:{productPrices:id}});
+    //     return as;
+    // }
 
 
-    async find_by_orderItemId(id: number){
-        const as = await this.oderItemsRepository.find({where:{Oder:id}});
+    async findOderItemsByOrderId(id: number){
+        const as = await this.oderItemsRepository.createQueryBuilder()
+        .select('orderitems')
+        .from(OderItems,'orderitems')
+        .where("orderitems.oderId = :id", { id: id })
+        .getMany();
         return as;
     }
 
