@@ -11,6 +11,11 @@ export class UsersController {
         private readonly userService: UsersService,
     ) { }
 
+    @Get()
+    get(){
+        return this.userService.findAll();
+    }
+
     @Post('signin')
     @UseGuards(LocalAuthGuard)
     serverRequiestSignin(@Request() req): any {

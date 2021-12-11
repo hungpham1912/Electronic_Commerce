@@ -19,7 +19,7 @@ export   class OderItems{
     @ManyToOne(type => Oders, oder => oder.id)
     Oder: Oders
 
-    @ManyToOne(type => ProductPrices, product_prices => product_prices.id)
-    Product_Prices: ProductPrices
+    @ManyToOne(type => ProductPrices, productPrices => productPrices.id)
+    productPrices: ProductPrices
 
 }

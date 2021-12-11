@@ -7,8 +7,8 @@ import { ProductsService } from "../products/products.service";
 import { StoresService } from "../stores/stores.service";
 import "reflect-metadata";
 import { CartItemsDto } from "./dto/cart.dto";
+import { User } from "../users/users.entity";
 import { OderItems } from 'src/oder-items/oder-items.entity';
-import console from 'console';
 @Injectable()
 export class OdersService {
     constructor(
@@ -24,13 +24,20 @@ export class OdersService {
     ) { }
 
 
-    async get_Cart(id: number) {
-        // const Order = await this.oderRepository.find({ where: { user: id, status: "ordered" } });
-        // const OrderItem = await this.OdersItemsService.find_by_orderItemId(Order[0].id);
-        // const Product_Prices = await this.ProductPricesService.find_by_producPriceId(OrderItem[0])
+    async postCart(){
+        
+    }
+
+    async getCart(userId: string){
+
+        // console.log(UserDs)
+        const Order = await this.oderRepository.find({where:{user:userId, status:'ordered'}});
+        const OrderItem = await this.OdersItemsService.findByProductPriceId(2);
+        const Product_Prices = await this.ProductPricesService.find_by_producPriceId(OrderItem[0]);
         // const Product = await this.ProductService.find_by_producId(Product_Prices.product);
         // const Store = await this.StoresService.findByStoreId(Product_Prices.Stores);
-        console.log("adasd")
+        // console.log(OrderItem);
+
         // const Cart: CartItemsDto[] = [];
         // for(let i = 0;i<OrderItem.length;i++){
         //     const Product_Prices = await this.ProductPricesService.find_by_producPriceId(OrderItem[i])
@@ -41,8 +48,7 @@ export class OdersService {
         //     // Cart[i].addressStore = Store.adress;
         //     // Cart[i].nameProduct = Product_Prices.nameProductPrice;
         //     // Cart[i].quanlity = OrderItem[i].quantity;
-        //     // console.log(Cart[i]);
-        //     await console.log("asdas");
+        //     console.log(Product_Prices);
 
         // }
 
@@ -50,8 +56,9 @@ export class OdersService {
         // const ms = await this.ProductService.find_by_producId(ts[0].id)
         // const gs = await this.StoresService.find_by_storeId(ms[0].id)
         // var mergedObj = { ...as[0], ...ds[0] };
-        // console.log(Order)
-        // console.log(OrderItem)
+        // console.log(Order[0].user)
+        console.log(OrderItem)
+
         // console.log(Product_Prices)
         // console.log(Product)
         // console.log(Store);

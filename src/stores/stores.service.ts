@@ -16,6 +16,13 @@ export class StoresService {
         const as = await this.StoresRepository.findOne(id);
         return as;
     }
-     
+
+    async saveStore(Store: any){
+        const as = await this.StoresRepository.save(Store);
+        return {statusCode: 200,message: 'Ok'}
+    }
+    
+
+
 
 }

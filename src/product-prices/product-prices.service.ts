@@ -12,8 +12,11 @@ export class ProductPricesService {
     ){}
     
     async find_by_producPriceId(oderItem: OderItems){
-
-        const as = await this.ProducPriceRepository.findOne(oderItem.Product_Prices);
+     
+        const as = await this.ProducPriceRepository.findOne({where:{id:null}});
+        // const as = await this.ProducPriceRepository.createQueryBuilder('ProductPrices')
+        // .leftJoinAndSelect("OderItems.productPrices","ProductPrices")
+        // .where("ProductPrices.id = :id", { id })
         return as;
     }
 

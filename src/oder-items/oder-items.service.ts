@@ -8,7 +8,15 @@ export class OderItemsService {
         private oderItemsRepository: Repository<OderItems>,
     ) { }
 
-    
+    async addOderItem(){
+        
+    }
+
+    async findByProductPriceId(id: number){
+        const as = await this.oderItemsRepository.find({where:{productPrices:id}});
+        return as;
+    }
+
 
     async find_by_orderItemId(id: number){
         const as = await this.oderItemsRepository.find({where:{Oder:id}});
