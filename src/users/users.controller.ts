@@ -16,6 +16,11 @@ export class UsersController {
         return this.userService.findAll();
     }
 
+    @Get('/forgot-password')
+    answerForgotPassword(@Body() Email: any){
+        return this.userService.answerForgotPassword(Email.email);
+    }
+
     @Post('signin')
     @UseGuards(LocalAuthGuard)
     serverRequiestSignin(@Request() req): any {
@@ -27,9 +32,14 @@ export class UsersController {
         return this.userService.athenticationSignup(infomationSignup);
     }
 
+
+
+
     @Get('authorization')
     myEnforcement() {
         return "Content in here..."
     }
+
+
 
 }

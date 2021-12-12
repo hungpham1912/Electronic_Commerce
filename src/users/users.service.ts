@@ -20,8 +20,8 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(username: string) {
-    const as = await this.userRepository.find({ where: { email: username } });
+  async findOne(email: string) {
+    const as = await this.userRepository.find({ where: { email: email } });
     if (as.length > 0) {
       const User = {
         id: as[0].id,
@@ -55,4 +55,16 @@ export class UsersService {
     }
 
   }
+
+  async answerForgotPassword(email: string) {
+    const checkMail = await this.findOne(email);
+    if (checkMail != null) {
+      this.emailService.sendEmailConfirmForgotPassword(email, checkMail.password)
+      return { statusCode: 200, message: 'OK' }
+    }
+    else return { statusCode: 404, message: 'Not find email' }
+  }
+
+  
+
 }

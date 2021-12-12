@@ -36,8 +36,15 @@
 	"price": "19000000",
 	"quantity": 5,
 	"oderId": 2,
-   "productPriceId": 1
+   	"productPriceId": 1
 
+}
+
+//DeleteCartItem
+
+{
+	"oderId": 2,
+   	"productPriceId": 1
 }
 
 
