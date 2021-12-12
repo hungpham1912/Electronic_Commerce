@@ -4,7 +4,7 @@ import { OderItemsController } from './oder-items.controller';
 import { OderItemProviders } from "./oder-items.providers";
 import { DatabaseModule } from "../database/database.module";
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule ],
   exports:[OderItemsService],
   providers: [
     ...OderItemProviders,

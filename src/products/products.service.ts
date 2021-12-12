@@ -13,7 +13,10 @@ export class ProductsService {
         return as;
     }
 
-
+    async createNewProduct(product: Product){
+        const result = this.ProducRepository.save(product)
+        return {statusCode: 200, message: "OK"}
+    }
 
 
 

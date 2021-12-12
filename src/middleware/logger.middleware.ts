@@ -7,13 +7,13 @@ export class LoggerMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         const authorizationHeader = req.headers['authorization'];
         if (authorizationHeader == null) {
-            res.send({error: 401,})
+            res.send({error: 401, message: `Do'nt find token` })
         }
         else {
             const /*String*/  token = authorizationHeader.split(" ")[1];
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
                 if (err) {
-                    res.send({error: 403,})
+                    res.send({error: 403, message: 'Token faild'})
                 }
                 else {
                     next();

@@ -22,6 +22,8 @@ export   class OderItems{
     @Column({ nullable: true })
     oderId: number
 
+    
+
     @ManyToOne(type => Oders, oder => oder.id)
     Oder: Oders
 

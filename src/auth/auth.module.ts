@@ -4,11 +4,11 @@ import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from "@nestjs/jwt";
-
+import { OderModule } from "../oders/oder.module";
 
 
 @Module({
-  imports: [UsersModule, PassportModule, 
+  imports: [UsersModule, PassportModule, OderModule,
     JwtModule.register({
     secret: 'secret',
     signOptions: { expiresIn: '1d' }

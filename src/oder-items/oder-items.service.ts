@@ -1,4 +1,4 @@
-import { Injectable,Inject } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { OderItems } from './oder-items.entity';
 import { Repository } from 'typeorm';
 @Injectable()
@@ -8,22 +8,39 @@ export class OderItemsService {
         private oderItemsRepository: Repository<OderItems>,
     ) { }
 
-    async addOderItem(){
+    async addPoductForCart(item: OderItems) {
+
+
+        const checkOderItem = this.findOderItemsByOrderId(item.oderId);
+
+
+
+
+
+
+        const result = await this.oderItemsRepository
+            .createQueryBuilder()
+            .insert()
+            .values({ ...item })
+            .execute()
+        return { statusCode: 200, message: "OK" }
         
+        
+
+
+
+
+
     }
 
-    // async findOderItemsByOrderId(id: number){
-    //     const as = await this.oderItemsRepository.find({where:{productPrices:id}});
-    //     return as;
-    // }
 
 
-    async findOderItemsByOrderId(id: number){
+    async findOderItemsByOrderId(id: number) {
         const as = await this.oderItemsRepository.createQueryBuilder()
-        .select('orderitems')
-        .from(OderItems,'orderitems')
-        .where("orderitems.oderId = :id", { id: id })
-        .getMany();
+            .select('orderitems')
+            .from(OderItems, 'orderitems')
+            .where("orderitems.oderId = :id", { id: id })
+            .getMany();
         return as;
     }
 
