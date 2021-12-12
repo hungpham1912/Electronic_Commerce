@@ -8,8 +8,13 @@ dotenv.config();
 @Controller('users')
 export class UsersController {
     constructor(
-        private readonly UserMethod: UsersService,
+        private readonly userService: UsersService,
     ) { }
+
+    @Get()
+    get(){
+        return this.userService.findAll();
+    }
 
     @Post('signin')
     @UseGuards(LocalAuthGuard)
@@ -19,7 +24,7 @@ export class UsersController {
 
     @Post('signup')
     serverRequestSignup(@Body() infomationSignup: any) {
-        return this.UserMethod.athenticationSignup(infomationSignup);
+        return this.userService.athenticationSignup(infomationSignup);
     }
 
     @Get('authorization')

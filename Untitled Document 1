@@ -1,0 +1,69 @@
+
+//User
+{
+  "email": "phamthanh.hung.work@gmail.com",
+  "full_name": "Pham Thanh Hung",
+  "adress": "Viet Nam",
+  "password": "123456",
+  "phone": "0964816205",
+  "level": "0"
+}
+
+
+//Store
+{
+    "nameStore": "Phone Clean",
+    "adress":"Thanh Xuan - Ha Dong"
+}
+
+//Login
+
+{
+	"email": "phamthanh.hung.work@gmail.com",
+	"password": "123456",
+}
+
+
+
+//Product
+{
+	"nameProduct": "kbdasd"
+}
+
+//AddCart
+
+{
+	"price": "19000000",
+	"quantity": 5,
+	"oderId": 2,
+   "productPriceId": 1
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

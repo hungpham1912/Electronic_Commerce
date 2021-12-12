@@ -1,7 +1,7 @@
 
 
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne} from "typeorm";
-import {User} from "../../users/entity/users.entity";
+import {User} from "../users/users.entity";
 
 
 @Entity()
