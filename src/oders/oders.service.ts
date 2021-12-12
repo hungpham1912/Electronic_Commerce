@@ -32,13 +32,13 @@ export class OdersService {
     async getCart(userId: string) {
         const Order = await this.oderRepository.findOne({ where: { user: userId, status: 'ordered' } });
         const OrderItem = await this.OdersItemsService.findOderItemsByOrderId(Order.id);
-
         let Cart: CartItemsDto[] = [];
         for (let i = 0; i < OrderItem.length; i++) {
             const ProductPrices = await this.ProductPricesService.findByProducPriceById(OrderItem[i].productPricesId);
             const Product = await this.ProductService.findProductByProducId(ProductPrices.productId);
             const Store = await this.StoresService.findByStoreId(ProductPrices.storesId);
             Cart[i] = {
+                id: OrderItem[i].id,
                 nameProduct: ProductPrices.nameProductPrice,
                 price: ProductPrices.price,
                 nameStore: Store.nameStore,

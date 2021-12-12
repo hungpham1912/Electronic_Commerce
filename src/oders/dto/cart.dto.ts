@@ -2,7 +2,8 @@ import { Entity } from "typeorm";
 
 @Entity()
 export class CartItemsDto {
- 
+  id: number
+
   nameProduct: string;
 
   price: string;

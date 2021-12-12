@@ -18,10 +18,6 @@ export class ProductPricesService {
         .from(ProductPrices,'product_prices')
         .where(`product_prices.id = ${productPricesId}`)
         .getOne();
-
-        // const as = await this.ProducPriceRepository.createQueryBuilder('ProductPrices')
-        // .leftJoinAndSelect("OderItems.productPrices","ProductPrices")
-        // .where("ProductPrices.id = :id", { id })
         return as;
     }
 
