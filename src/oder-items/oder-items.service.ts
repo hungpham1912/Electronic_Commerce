@@ -1,11 +1,20 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { OderItems } from './oder-items.entity';
+import { OdersService } from "../oders/oders.service";
 import { Repository } from 'typeorm';
+import { CartItemsDto } from "./dto/cart.dto";
+import { ProductPricesService } from "../product-prices/product-prices.service";
+import { ProductsService } from "../products/products.service";
+import { StoresService } from "../stores/stores.service";
 @Injectable()
 export class OderItemsService {
     constructor(
         @Inject('ODERSITEMS_REPOSITORY')
         private oderItemsRepository: Repository<OderItems>,
+        private readonly orderService: OdersService,
+        private readonly ProductPricesService: ProductPricesService,
+        private readonly ProductService: ProductsService,
+        private readonly StoresService: StoresService
     ) { }
 
     async addPoductForCart(item: OderItems) {
@@ -58,13 +67,23 @@ export class OderItemsService {
     }
 
 
-
-
-
-
-
-
-
-
-
+    async getOrderItemForCart(userId: number) {
+        const Order = await this.orderService.getOrderByUserId(userId);
+        const OrderItem = await this.findOderItemsByOrderId(Order.id);
+        let Cart: CartItemsDto[] = [];
+        for (let i = 0; i < OrderItem.length; i++) {
+            const ProductPrices = await this.ProductPricesService.findByProducPriceById(OrderItem[i].productPricesId);
+            const Product = await this.ProductService.findProductByProducId(ProductPrices.productId);
+            const Store = await this.StoresService.findByStoreId(ProductPrices.storesId);
+            Cart[i] = {
+                id: OrderItem[i].id,
+                nameProduct: ProductPrices.nameProductPrice,
+                price: ProductPrices.price,
+                nameStore: Store.nameStore,
+                addressStore: Store.adress,
+                quanlity: OrderItem[i].quantity
+            }
+        }
+        return Cart;
+    }
 }

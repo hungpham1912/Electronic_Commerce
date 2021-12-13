@@ -32,6 +32,11 @@ export class UsersController {
         return this.userService.athenticationSignup(infomationSignup);
     }
 
+    @Put('/change-password')
+    changePassword(@Body() newPassword: any){
+        return this.userService.changePassword(newPassword)
+    }
+
 
 
 

@@ -37,6 +37,17 @@ export class UsersService {
     else return null;
   }
 
+  async changePassword(newPassword: any) {
+    const updatePassword = await this.userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ password: newPassword.newPassword })
+    .where("id = :id", { id: newPassword.userId })
+    .execute();
+    return { statusCode: 200, message: 'OK' }
+  }
+
+
   async athenticationSignup(infomationSignup: any) {
     const as = await this.userRepository.find();
     if (as.length == 0) {
@@ -65,6 +76,6 @@ export class UsersService {
     else return { statusCode: 404, message: 'Not find email' }
   }
 
-  
+
 
 }

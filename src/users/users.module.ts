@@ -29,6 +29,8 @@ export class UsersModule implements NestModule {
       .apply(LoggerMiddleware)
       .forRoutes(
         { path: 'users/authorization', method: RequestMethod.GET },
+        { path: 'users/change-password', method: RequestMethod.PUT },
+
       );
   }
 
