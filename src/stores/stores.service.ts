@@ -25,8 +25,5 @@ export class StoresService {
         .execute();
         return {statusCode: 200,message: 'Ok'}
     }
-    
-
-
 
 }

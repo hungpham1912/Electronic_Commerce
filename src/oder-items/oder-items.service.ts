@@ -6,6 +6,7 @@ import { CartItemsDto } from "./dto/cart.dto";
 import { ProductPricesService } from "../product-prices/product-prices.service";
 import { ProductsService } from "../products/products.service";
 import { StoresService } from "../stores/stores.service";
+import { Oders } from 'src/oders/oders.entity';
 @Injectable()
 export class OderItemsService {
     constructor(
@@ -14,13 +15,24 @@ export class OderItemsService {
         private readonly orderService: OdersService,
         private readonly ProductPricesService: ProductPricesService,
         private readonly ProductService: ProductsService,
-        private readonly StoresService: StoresService
+        private readonly StoresService: StoresService,
     ) { }
 
     async addPoductForCart(item: OderItems) {
-        const checkOderItem = await this.checkOrderItemExist(item.oderId, item.productPricesId);
-        if (checkOderItem == 0) return await this.addOrderItem(item);
-        else return await this.updateQuantityOrderItems(item.quantity + checkOderItem.quantity, checkOderItem.id);
+        const oderId: number = item.oderId;
+        const productPricesId: number = item.productPricesId;
+
+        const checkOderItem = await this.checkOrderItemExist(oderId, productPricesId);
+
+        if (checkOderItem == null) {
+            return await this.addOrderItem(item);
+        }
+        else {
+            const quantity: number = item.quantity + checkOderItem.quantity;
+            const id: number = checkOderItem.id;
+
+            return await this.updateQuantityOrderItems(quantity, id);
+        }
     }
 
     async addOrderItem(item: OderItems) {
@@ -42,7 +54,7 @@ export class OderItemsService {
         return { statusCode: 200, message: "OK" }
     }
 
-    async deleteItemInCart(ids: []) {
+    async deleteItemInCart(ids: number[]) {
         for (let i = 0; i < ids.length; i++) {
             await this.oderItemsRepository.delete(ids[i])
         }
@@ -51,8 +63,13 @@ export class OderItemsService {
 
 
     async checkOrderItemExist(orderId: number, productPrId: number) {
-        const result = await this.oderItemsRepository.find({ where: { oderId: orderId, productPricesId: productPrId } })
-        if (result.length == 0) return 0;
+        const result = await this.oderItemsRepository.find(
+            { where: { 
+                oderId: orderId, 
+                productPricesId: productPrId 
+            } 
+        })
+        if (result.length == 0) return null;
         else return { quantity: result[0].quantity, id: result[0].id };
     }
 

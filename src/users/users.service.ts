@@ -77,5 +77,18 @@ export class UsersService {
   }
 
 
+  async test(test: User){
+    const asd = new User();
+    asd.full_name = test.full_name;
+    asd.phone = test.phone;
+    asd.email = test.email;
+    asd.adress = test.adress;
+    asd.password = test.password;
+    asd.level = test.level;
+    console.log(asd)
+    this.userRepository.save(asd);
+
+  }
+
 
 }

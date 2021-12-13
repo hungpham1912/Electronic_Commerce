@@ -2,6 +2,7 @@ import { Controller, UseGuards, Get, Post, Delete, Put, Body, Param, Header, Req
 import { UsersService } from './users.service'
 import { LocalAuthGuard } from "../auth/local-auth.guard";
 import * as dotenv from 'dotenv'
+import { User } from "./users.entity";
 dotenv.config();
 
 
@@ -45,6 +46,9 @@ export class UsersController {
         return "Content in here..."
     }
 
-
+    @Get('/test')
+    test(@Body() test: User){
+        return this.userService.test(test);
+    }
 
 }
