@@ -1,42 +1,67 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  AfterLoad,
+  AfterInsert,
+} from 'typeorm';
+import {
+  IsLatLong,
+  IsLatitude,
+  IsEmpty,
+  IsNumber,
+  IsNotEmpty,
+  IsUrl,
+  ValidateIf,
+  IsEmail,
+  IsMobilePhone,
+  IsString,
+  validate,
+} from 'class-validator';
+import { isString } from 'util';
 
-
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
-import {IsLatLong, IsLatitude, IsEmpty,IsNumber ,IsNotEmpty,IsUrl,ValidateIf,IsEmail,IsMobilePhone,IsString,validate} from "class-validator";
-import { isString } from "util";
-
+export enum Role {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 @Entity()
-export  class User{
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  @IsNotEmpty()
+  full_name: string;
 
-    @Column()
-    @IsNotEmpty()
-    full_name: string;
+  @Column()
+  @IsNotEmpty()
+  @IsMobilePhone('vi-VN')
+  @IsString()
+  phone: string;
 
-    @Column()
-    @IsNotEmpty()
-    @IsMobilePhone('vi-VN')
-    @IsString()
-    phone: string;
+  @Column()
+  @IsNotEmpty()
+  @IsEmail()
+  @ValidateIf((o) => o.email == '')
+  email: string;
 
-    @Column()
-    @IsNotEmpty()
-    @IsEmail()
-    @ValidateIf(o => o.email == '' )
-    email: string;
+  @Column()
+  @IsNotEmpty()
+  adress: string;
 
-    @Column()
-    @IsNotEmpty()
-    adress: string;
+  @Column()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 
-    @Column()
-    @IsNotEmpty()
-    @IsString()
-    password: string;
+  @Column()
+  @IsNumber()
+  level: number;
 
-    @Column()
-    @IsNumber()
-    level: number;
+  @AfterInsert()
+  test() {
+    console.log('after insert');
+  }
 }

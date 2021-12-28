@@ -22,5 +22,6 @@ export   class Oders{
 
     @ManyToOne(type => User, user => user.id)
     user: User
+    userId: string
 
 }

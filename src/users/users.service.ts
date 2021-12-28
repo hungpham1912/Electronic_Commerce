@@ -12,7 +12,6 @@ export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
-    private readonly sendGrid: SendGridService,
     private readonly emailService: EmailService
   ) { }
 
@@ -60,6 +59,7 @@ export class UsersService {
       if (emailExist == null) {
         this.emailService.sendEmail(infomationSignup)
         this.userRepository.save(infomationSignup);
+        console.log("save");
         return { error: 200, status: "OK" }
       }
       else return { error: 403, status: "Account alredy exist!!" }

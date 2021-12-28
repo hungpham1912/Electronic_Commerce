@@ -1,8 +1,9 @@
-import { Controller, UseGuards, Get, Post, Delete, Put, Body, Param, Header, Req, Request, Res, Response } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Delete, Put, Body, Param, Header, Req, Request, Res, Response, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service'
 import { LocalAuthGuard } from "../auth/local-auth.guard";
 import * as dotenv from 'dotenv'
 import { User } from "./users.entity";
+
 dotenv.config();
 
 
@@ -24,7 +25,7 @@ export class UsersController {
 
     @Post('signin')
     @UseGuards(LocalAuthGuard)
-    serverRequiestSignin(@Request() req): any {
+    serverRequiestSignin(@Request() req: any): any {
         return req.user;
     }
 
@@ -46,9 +47,9 @@ export class UsersController {
         return "Content in here..."
     }
 
-    @Get('/test')
-    test(@Body() test: User){
-        return this.userService.test(test);
+    @Get('/test/:id')
+    test(@Param('id', ParseIntPipe) id: number, ){
+       console.log("Test")
     }
 
 }
