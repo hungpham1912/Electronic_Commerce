@@ -1,7 +1,9 @@
-import { Controller, UseGuards, Get, Post, Delete, Put, Body, Param, Header, Req, Request, Res, Response } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Delete, Put, Body, Param, Header, Req, Request, Res, Response, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service'
 import { LocalAuthGuard } from "../auth/local-auth.guard";
 import * as dotenv from 'dotenv'
+import { User } from "./users.entity";
+
 dotenv.config();
 
 
@@ -16,9 +18,14 @@ export class UsersController {
         return this.userService.findAll();
     }
 
+    @Get('/forgot-password')
+    answerForgotPassword(@Body() Email: any){
+        return this.userService.answerForgotPassword(Email.email);
+    }
+
     @Post('signin')
     @UseGuards(LocalAuthGuard)
-    serverRequiestSignin(@Request() req): any {
+    serverRequiestSignin(@Request() req: any): any {
         return req.user;
     }
 
@@ -27,9 +34,22 @@ export class UsersController {
         return this.userService.athenticationSignup(infomationSignup);
     }
 
+    @Put('/change-password')
+    changePassword(@Body() newPassword: any){
+        return this.userService.changePassword(newPassword)
+    }
+
+
+
+
     @Get('authorization')
     myEnforcement() {
         return "Content in here..."
+    }
+
+    @Get('/test/:id')
+    test(@Param('id', ParseIntPipe) id: number, ){
+       console.log("Test")
     }
 
 }

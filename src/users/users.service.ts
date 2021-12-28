@@ -12,7 +12,6 @@ export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
-    private readonly sendGrid: SendGridService,
     private readonly emailService: EmailService
   ) { }
 
@@ -20,8 +19,8 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(username: string) {
-    const as = await this.userRepository.find({ where: { email: username } });
+  async findOne(email: string) {
+    const as = await this.userRepository.find({ where: { email: email } });
     if (as.length > 0) {
       const User = {
         id: as[0].id,
@@ -37,6 +36,17 @@ export class UsersService {
     else return null;
   }
 
+  async changePassword(newPassword: any) {
+    const updatePassword = await this.userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ password: newPassword.newPassword })
+    .where("id = :id", { id: newPassword.userId })
+    .execute();
+    return { statusCode: 200, message: 'OK' }
+  }
+
+
   async athenticationSignup(infomationSignup: any) {
     const as = await this.userRepository.find();
     if (as.length == 0) {
@@ -49,10 +59,36 @@ export class UsersService {
       if (emailExist == null) {
         this.emailService.sendEmail(infomationSignup)
         this.userRepository.save(infomationSignup);
+        console.log("save");
         return { error: 200, status: "OK" }
       }
       else return { error: 403, status: "Account alredy exist!!" }
     }
 
   }
+
+  async answerForgotPassword(email: string) {
+    const checkMail = await this.findOne(email);
+    if (checkMail != null) {
+      this.emailService.sendEmailConfirmForgotPassword(email, checkMail.password)
+      return { statusCode: 200, message: 'OK' }
+    }
+    else return { statusCode: 404, message: 'Not find email' }
+  }
+
+
+  async test(test: User){
+    const asd = new User();
+    asd.full_name = test.full_name;
+    asd.phone = test.phone;
+    asd.email = test.email;
+    asd.adress = test.adress;
+    asd.password = test.password;
+    asd.level = test.level;
+    console.log(asd)
+    this.userRepository.save(asd);
+
+  }
+
+
 }

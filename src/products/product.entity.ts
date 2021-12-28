@@ -1,8 +1,7 @@
 
 
-import { OderItems } from "src/oder-items/oder-items.entity";
-import { Stores } from "src/stores/stores.entity";
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany} from "typeorm";
+import {IsLatLong, IsLatitude,IsNumber ,IsNotEmpty,IsUrl,ValidateIf,IsEmail,IsMobilePhone,IsString,validate} from "class-validator";
 
 
 @Entity()
@@ -11,6 +10,8 @@ export   class Product{
     id: number;
 
     @Column()
+    @IsString()
+    @IsNotEmpty()
     nameProduct: string;   
 
 }
