@@ -36,6 +36,11 @@ export class UsersService {
     else return null;
   }
 
+  async findById(id: number){
+    return await this.userRepository.findOne(id)
+  }
+
+
   async changePassword(newPassword: any) {
     const updatePassword = await this.userRepository
     .createQueryBuilder()

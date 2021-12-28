@@ -6,10 +6,9 @@ export class CreateOrderDto{
     @IsNotEmpty()
     status: string
 
-    @IsPhoneNumber()
+    @IsPhoneNumber('VN')
     phone: string
 
-    @IsNotEmpty()
-    userId: string
+  
 
 }

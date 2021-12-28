@@ -5,6 +5,7 @@ import {
   BaseEntity,
   AfterLoad,
   AfterInsert,
+  OneToMany,
 } from 'typeorm';
 import {
   IsLatLong,
@@ -20,6 +21,8 @@ import {
   validate,
 } from 'class-validator';
 import { isString } from 'util';
+import { Oders } from "../oders/oders.entity";
+
 
 export enum Role {
   ADMIN = 'admin',
@@ -59,6 +62,12 @@ export class User {
   @Column()
   @IsNumber()
   level: number;
+
+  
+  @OneToMany(() => Oders, (order) => order.user,{
+    eager: true,
+  })
+  orders: Oders[];
 
   @AfterInsert()
   test() {

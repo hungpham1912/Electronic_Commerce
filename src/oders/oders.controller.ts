@@ -2,14 +2,14 @@ import { Controller, Get, Post, Delete, Put, Body, Param, Header, Req, Request,R
 import { CreateOrderDto } from './dto/create-order.dto';
 import {OdersService} from './oders.service'
 import { ValidationPipe } from "../auth/validations/validation.pipe";
-@Controller('oders')
+@Controller('orders')
 export class OdersController {
     constructor(private readonly OderMethod: OdersService) { }
   
 
-    @Post()
-    create(@Body() order: CreateOrderDto){
-        return this.OderMethod.create(order)
+    @Post('/:userId')
+    create(@Param() Ids: any,@Body() order: CreateOrderDto){
+        return this.OderMethod.create(Ids.userId,order)
     }
 
     @Get()

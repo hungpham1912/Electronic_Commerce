@@ -3,7 +3,6 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { userProviders } from './user.providers';
 import { DatabaseModule } from '../database/database.module';
-import { OderModule } from '../oders/oder.module';
 import { LoggerMiddleware } from '../middleware/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { SendGridModule } from "@anchan828/nest-sendgrid";
@@ -13,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
-  imports: [DatabaseModule,EmailModule ,OderModule,ConfigModule.forRoot(), SendGridModule.forRoot({
+  imports: [DatabaseModule,EmailModule ,ConfigModule.forRoot(), SendGridModule.forRoot({
     apikey: process.env.SEND_GRID_ACCESS_KEY
   })],
   controllers: [UsersController],
