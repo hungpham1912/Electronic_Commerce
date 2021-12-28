@@ -40,8 +40,6 @@ export class UsersController {
     }
 
 
-
-
     @Get('authorization')
     myEnforcement() {
         return "Content in here..."

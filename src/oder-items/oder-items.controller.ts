@@ -8,12 +8,16 @@ export class OderItemsController {
     constructor(private readonly OderItemMethod: OderItemsService) { }
     
 
+    @Get()
+    getAll(@Param() param: any, ){
+       return this.OderItemMethod.findAll()
+    }
+
+
     @Post()
     addPoductPriceForCart(@Body() item :OderItems ){
         return this.OderItemMethod.addPoductForCart(item);
     }
-
-
 
     @Delete()
     deleteProductPriceForCart(@Body() ids: any){
@@ -21,7 +25,7 @@ export class OderItemsController {
     }
 
     @Get('/order/:orderId')
-    getAll(@Param() param: any, ){
+    getByOrderId(@Param() param: any, ){
        
     }
 

@@ -18,6 +18,11 @@ export class OderItemsService {
         private readonly StoresService: StoresService,
     ) { }
 
+
+    async findAll(){
+        return this.oderItemsRepository.find()
+    }
+
     async addPoductForCart(item: OderItems) {
        
     }
