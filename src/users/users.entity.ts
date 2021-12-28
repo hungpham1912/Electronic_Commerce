@@ -64,9 +64,7 @@ export class User {
   level: number;
 
   
-  @OneToMany(() => Oders, (order) => order.user,{
-    eager: true,
-  })
+  @OneToMany(() => Oders, (order) => order.user,)
   orders: Oders[];
 
   @AfterInsert()

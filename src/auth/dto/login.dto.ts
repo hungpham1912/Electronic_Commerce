@@ -19,6 +19,5 @@ export class LoginDto {
 
   accessToken: string;
 
-  orderId: number;
 
 }

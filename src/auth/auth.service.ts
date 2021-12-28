@@ -28,7 +28,6 @@ export class AuthService {
           password: user.password,
           level: user.level,
           accessToken: userAccessToken.accessToken,
-          orderId: odered.id,
         }
 
         return LoginUser;

@@ -9,11 +9,20 @@ import { ProductPricesModule } from './product-prices/product-prices.module';
 import { ProductsModule } from './products/products.module';
 import { ProductImagesModule } from './product-images/product-images.module';
 import { PublicFilesModule } from './public-files/public-files.module';
-import { PipesModule } from './pipes/pipes.module';
-
 
 @Module({
-  imports: [ OderModule,AuthModule, UsersModule, EmailModule, OderItemsModule, StoresModule, ProductPricesModule, ProductsModule, ProductImagesModule, PublicFilesModule, PipesModule],
+  imports: [
+    OderModule,
+    AuthModule,
+    UsersModule,
+    EmailModule,
+    OderItemsModule,
+    StoresModule,
+    ProductPricesModule,
+    ProductsModule,
+    ProductImagesModule,
+    PublicFilesModule,
+  ],
   providers: [],
 })
 export class AppModule {}

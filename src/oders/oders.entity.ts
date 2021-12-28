@@ -6,7 +6,9 @@ import {
   ManyToOne,
   CreateDateColumn,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { OderItems } from "../oder-items/oder-items.entity";
 import { User } from '../users/users.entity';
 import {
   IsLatLong,
@@ -36,13 +38,21 @@ export class Oders {
   @IsString()
   phone: string;
 
-  @ManyToOne(() => User, (user) => user.id, )
+  @ManyToOne(() => User, (user) => user.id, {
+    eager: true,
+  })
   @JoinColumn({
     name: 'userId',
     referencedColumnName: 'id',
   })
   user: User;
   userId: number
+  
+  @OneToMany(() => OderItems, (orderItem) => orderItem.order,{
+      eager: true
+  })
+  orderItems: OderItems[];
+
 
   @CreateDateColumn()
   createAt: Date;

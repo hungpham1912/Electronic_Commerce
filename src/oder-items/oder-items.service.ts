@@ -19,20 +19,7 @@ export class OderItemsService {
     ) { }
 
     async addPoductForCart(item: OderItems) {
-        const oderId: number = item.oderId;
-        const productPricesId: number = item.productPricesId;
-
-        const checkOderItem = await this.checkOrderItemExist(oderId, productPricesId);
-
-        if (checkOderItem == null) {
-            return await this.addOrderItem(item);
-        }
-        else {
-            const quantity: number = item.quantity + checkOderItem.quantity;
-            const id: number = checkOderItem.id;
-
-            return await this.updateQuantityOrderItems(quantity, id);
-        }
+       
     }
 
     async addOrderItem(item: OderItems) {
