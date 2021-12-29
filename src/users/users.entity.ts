@@ -59,9 +59,11 @@ export class User {
   @IsString()
   password: string;
 
-  @Column()
-  @IsNumber()
-  level: number;
+  @Column({
+    default: Role.USER
+  })
+  @IsNotEmpty()
+  role: string;
 
   
   @OneToMany(() => Oders, (order) => order.user,)

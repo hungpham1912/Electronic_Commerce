@@ -9,6 +9,7 @@ import { ProductPricesModule } from './product-prices/product-prices.module';
 import { ProductsModule } from './products/products.module';
 import { ProductImagesModule } from './product-images/product-images.module';
 import { PublicFilesModule } from './public-files/public-files.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PublicFilesModule } from './public-files/public-files.module';
     ProductsModule,
     ProductImagesModule,
     PublicFilesModule,
+    CaslModule,
   ],
   providers: [],
 })

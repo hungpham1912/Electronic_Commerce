@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Inject, ConsoleLogger } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './users.entity';
+import { User , Role} from './users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { EmailService } from '../email/email.service';
@@ -29,7 +29,7 @@ export class UsersService {
         email: as[0].email,
         adress: as[0].adress,
         password: as[0].password,
-        level: as[0].level
+        role: Role.USER
       }
       return User;
     }
@@ -52,7 +52,7 @@ export class UsersService {
   }
 
 
-  async athenticationSignup(infomationSignup: any) {
+  async authenticationSignup(infomationSignup: any) {
     const as = await this.userRepository.find();
     if (as.length == 0) {
       this.emailService.sendEmail(infomationSignup)
@@ -89,7 +89,7 @@ export class UsersService {
     asd.email = test.email;
     asd.adress = test.adress;
     asd.password = test.password;
-    asd.level = test.level;
+    asd.role = Role.USER;
     console.log(asd)
     this.userRepository.save(asd);
 
