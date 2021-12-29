@@ -29,7 +29,7 @@ export class UsersModule implements NestModule {
       .forRoutes(
         { path: 'users/authorization', method: RequestMethod.GET },
         { path: 'users/change-password', method: RequestMethod.PUT },
-
+        
       );
   }
 

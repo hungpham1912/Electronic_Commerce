@@ -41,7 +41,9 @@ export   class ProductPrices{
     @OneToMany(type =>OderItems, oder_items => oder_items.productPrices,)
     oder_Items: OderItems[]
 
-    @ManyToOne(type => Product, product => product.id)
+    @ManyToOne(type => Product, product => product.id,{
+        eager: true
+    })
     product: Product
 
 }

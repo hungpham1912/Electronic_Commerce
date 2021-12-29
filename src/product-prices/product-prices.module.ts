@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ProductPriceProviders} from './product-prices.providers';
 import { ProductPricesService } from './product-prices.service';
 import { DatabaseModule } from "../database/database.module";
 import { ProductPricesController } from './product-prices.controller';
+import { LoggerMiddleware } from "../middleware/logger.middleware";
 @Module({
   imports: [DatabaseModule],
 
@@ -12,4 +13,13 @@ import { ProductPricesController } from './product-prices.controller';
   exports:[ProductPricesService],
   controllers: [ProductPricesController]
 })
-export class ProductPricesModule {}
+export class ProductPricesModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+    .apply(LoggerMiddleware)
+    .forRoutes(
+      { path: 'product-prices', method: RequestMethod.GET },
+      
+    );
+  }
+}

@@ -3,7 +3,7 @@ import { Entity } from "typeorm";
 @Entity()
 export class LoginDto {
  
-  userId: number;
+  id: number;
 
   full_name: string;
  

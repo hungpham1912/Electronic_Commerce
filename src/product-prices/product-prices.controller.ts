@@ -9,4 +9,6 @@ export class ProductPricesController {
         return this.ProductPricesService.findAll()
     }
 
+    
+
 }

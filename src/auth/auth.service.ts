@@ -18,19 +18,7 @@ export class AuthService {
       case ((user != null) && (user.password != password)): return { error: 401, };
       case ((user != null) && (user.password == password)): {
         const userAccessToken = { accessToken: jwt.sign(user, process.env.ACCESS_TOKEN_SECRET), }
-        const odered = await this.orderService.getOrderByUserId(user.id)
-        const LoginUser: LoginDto = {
-          userId: user.id,
-          full_name: user.full_name,
-          phone: user.phone,
-          email: user.email,
-          adress: user.adress,
-          password: user.password,
-          level: user.level,
-          accessToken: userAccessToken.accessToken,
-        }
-
-        return LoginUser;
+        return {...user,...userAccessToken};
       }
     }
   }
