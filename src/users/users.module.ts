@@ -9,6 +9,8 @@ import { SendGridModule } from "@anchan828/nest-sendgrid";
 import { EmailModule } from '../email/email.module';
 import { User } from "./users.entity";
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RolesGuard } from 'src/auth/role.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 
 @Module({
@@ -16,7 +18,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     apikey: process.env.SEND_GRID_ACCESS_KEY
   })],
   controllers: [UsersController],
-  providers: [
+  providers: [{
+    provide: APP_GUARD,
+    useClass: RolesGuard,
+  },
     ...userProviders,
     UsersService,],
   exports: [UsersService],

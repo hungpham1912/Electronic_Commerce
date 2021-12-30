@@ -63,9 +63,8 @@ export class User {
     default: Role.USER
   })
   @IsNotEmpty()
-  role: string;
+  role: Role;
 
-  
   @OneToMany(() => Oders, (order) => order.user,)
   orders: Oders[];
 
