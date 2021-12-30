@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, UseGuards, Body, Request } from '@nestjs/common';
 import { UsersService } from "../users/users.service";
 import { LocalAuthGuard } from "../auth/local-auth.guard";
+import { CreateUserDto } from 'src/users/dto/create-use.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +22,7 @@ export class AuthController {
     }
   
     @Post('signup')
-    serverRequestSignup(@Body() infomationSignup: any) {
+    serverRequestSignup(@Body() infomationSignup: CreateUserDto) {
       return this.userService.authenticationSignup(infomationSignup);
     }
   
