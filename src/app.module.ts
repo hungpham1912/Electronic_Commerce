@@ -10,6 +10,7 @@ import { ProductsModule } from './products/products.module';
 import { ProductImagesModule } from './product-images/product-images.module';
 import { PublicFilesModule } from './public-files/public-files.module';
 import { CaslModule } from './casl/casl.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -24,6 +25,12 @@ import { CaslModule } from './casl/casl.module';
     ProductImagesModule,
     PublicFilesModule,
     CaslModule,
+    RouterModule.register([
+      {
+        path: 'e-commerce',
+        module: UsersModule
+      }
+    ])
   ],
   providers: [],
 })
