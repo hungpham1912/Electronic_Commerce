@@ -1,18 +1,32 @@
-import { Controller, Get, Post, Put, UseGuards, Body, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, UseGuards, Body, Request, Req } from '@nestjs/common';
 import { UsersService } from "../users/users.service";
-import { LocalAuthGuard } from "../auth/local-auth.guard";
+import { LocalAuthGuard } from "../auth/guard/local-auth.guard";
 import { CreateUserDto } from 'src/users/dto/create-use.dto';
+import { LoginByAppleDto } from './dto/login.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
 
     constructor (
-        private readonly userService: UsersService
+        private readonly userService: UsersService,
+        private readonly authService: AuthService
     ){}
 
     @Get('/forgot-password')
     answerForgotPassword(@Body() Email: any) {
       return this.userService.answerForgotPassword(Email.email);
+    }
+
+    @Get('/apple/callback')
+    getToken(@Request() req: any) {
+      return this.authService.getAccessToken(req);
+    }
+
+
+    @Post('signin/apple')
+    signByApple(@Body() inf: LoginByAppleDto) {
+      return this.authService.loginByApple(inf)
     }
   
     @Post('signin')

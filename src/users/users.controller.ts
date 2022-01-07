@@ -17,10 +17,10 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { LocalAuthGuard } from '../auth/guard/local-auth.guard'
 import * as dotenv from 'dotenv';
 import { Role, User } from './users.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/role/role.decorator';

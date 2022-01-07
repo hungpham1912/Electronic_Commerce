@@ -1,6 +1,13 @@
 import { Entity } from "typeorm";
 
-@Entity()
+
+export class LoginByAppleDto { 
+  adress: string;
+
+  password: string;
+}
+
+
 export class LoginDto {
  
   id: number;

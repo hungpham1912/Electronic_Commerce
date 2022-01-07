@@ -9,7 +9,7 @@ import { SendGridModule } from "@anchan828/nest-sendgrid";
 import { EmailModule } from '../email/email.module';
 import { User } from "./users.entity";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolesGuard } from 'src/auth/role.guard';
+import { RolesGuard } from 'src/auth/guard/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 
 
