@@ -20,15 +20,15 @@ import { UsersService } from './users.service';
 import { LocalAuthGuard } from '../auth/guard/local-auth.guard'
 import * as dotenv from 'dotenv';
 import { Role, User } from './users.entity';
-import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/role/role.decorator';
-import { LocalStrategy } from 'src/auth/strategy/local.strategy';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 import * as bcrypt from 'bcrypt';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
+import { AppleAuthGuard } from "../auth/guard/apple-auth.guard";
+import { JwtAuthGuard } from "../auth/guard/jwt-auth.guard";
 
 dotenv.config();
 
@@ -82,7 +82,9 @@ export class UsersController {
   }
 
   @Get('/test/:id')
-  test(@Param('id', ParseIntPipe) id: number) {
-    console.log('Test');
+  @UseGuards(JwtAuthGuard)
+  test(@Param('id', ParseIntPipe) id: number, @Req() req : any) {
+    // console.log( req.user)
+    console.log(id);
   }
 }

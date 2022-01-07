@@ -7,18 +7,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { OderModule } from '../oders/oder.module';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
-
+import { AppleStrategy } from "./strategy/apple.strategy";
 @Module({
   imports: [
     UsersModule,
-    PassportModule,
+    // PassportModule,
     OderModule,
-    JwtModule.register({
-      secret: 'secretKey',
-      signOptions: { expiresIn: '60h' },
-    }),
+    // JwtModule.register({
+    //   secret: process.env.ACCESS_TOKEN_SECRET,
+    //   signOptions: { expiresIn: '60h' },
+    // }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, AppleStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

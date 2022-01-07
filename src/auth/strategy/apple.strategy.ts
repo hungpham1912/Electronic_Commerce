@@ -1,31 +1,47 @@
-
-
-import  {Strategy } from 'passport-apple';
+import { Strategy } from 'passport-apple';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { AuthService } from '../auth.service';
+import passport from 'passport';
+
+// import {
+//   initialize,
+//   session,
+//   serializeUser,
+//   deserializeUser,
+//   authenticate,
+// } from 'passport';
 
 // import { jwtConstants } from './constants';
 
 @Injectable()
 export class AppleStrategy extends PassportStrategy(Strategy) {
-  constructor() {
-    super();
+  constructor(private readonly authService: AuthService) {
+    super({
+      clientID: 'phamthanh.hung.work@gmail.com',
+      teamID: '',
+      callbackURL: '',
+      keyID: '',
+      privateKeyLocation: '',
+    });
   }
 
-  
-  
+  async validate(payload: any, req: Request) {
+    console.log( req)
+    
+    console.log('Authenticate token Apple');
+    return payload;
+    // return await this.authService.validateUserByToken(payload.res,payload.req);
+  }
 }
 
 
-
-
-
-
 /*
+
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
-const passport = require('passport');
+// const passport = require('passport');
 const AppleStrategy = require('passport-apple');
 
 app.get("/", (req, res) => {

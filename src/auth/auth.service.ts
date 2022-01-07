@@ -13,6 +13,24 @@ export class AuthService {
     private readonly orderService: OdersService,
   ) {}
 
+  async validateUserByToken(req: Request, res: Response,) {
+    const authorizationHeader = req.headers['authorization'];
+        if (authorizationHeader == null) {
+          return({error: 401, message: `Do'nt find token` })
+        }
+        else {
+            const /*String*/  token = authorizationHeader.split(" ")[1];
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+                if (err) {
+                  return({error: 403, message: 'Token faild'})
+                }
+                else {
+                    return;
+                }
+            })
+        }
+  }
+
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(email);
     switch (true) {
