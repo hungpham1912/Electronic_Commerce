@@ -17,31 +17,26 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesGuard } from 'src/auth/guard/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 // import { JwtModule } from '@nestjs/jwt';
 // import {  } from "@nestjs/apple";
 @Module({
   imports: [
     DatabaseModule,
     EmailModule,
-    // PassportModule,
     ConfigModule.forRoot(),
     SendGridModule.forRoot({
       apikey: process.env.SEND_GRID_ACCESS_KEY,
     }),
-
-    // JwtModule.register({
-    //   secret: process.env.ACCESS_TOKEN_SECRET,
-    //   signOptions: { expiresIn: '60h' },
-    // }),
   ],
   controllers: [UsersController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
     ...userProviders,
     UsersService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    }
   ],
   exports: [UsersService],
 })

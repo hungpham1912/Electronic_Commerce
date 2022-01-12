@@ -59,9 +59,7 @@ export class User {
   @IsString()
   password: string;
 
-  @Column({
-    default: Role.USER
-  })
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
   @IsNotEmpty()
   role: Role;
 

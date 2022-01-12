@@ -17,11 +17,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any,  req : Request) {
-    const contextId = ContextIdFactory.getByRequest(req);
-    console.log(payload)
-    console.log('Authenticate token')
-    return payload
-    // return await this.authService.validateUserByToken(payload.res,payload.req);
+  async validate(payload: any) {
+    // const contextId = ContextIdFactory.getByRequest(req);
+    const user = await  this.authService.validateById(payload.id);
+    return user
   }
 }

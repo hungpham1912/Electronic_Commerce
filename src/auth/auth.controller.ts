@@ -31,8 +31,8 @@ export class AuthController {
   
     @Post('signin')
     @UseGuards(LocalAuthGuard)
-    serverRequiestSignin(@Request() req: any): any {
-      return req.user;
+    serverRequiestSignin(@Body() body) {
+      return this.authService.login(body);
     }
   
     @Post('signup')

@@ -15,25 +15,34 @@ import {
   ParseIntPipe,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { LocalAuthGuard } from '../auth/guard/local-auth.guard'
+import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
 import * as dotenv from 'dotenv';
 import { Role, User } from './users.entity';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/role/role.decorator';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 import * as bcrypt from 'bcrypt';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
-import { AppleAuthGuard } from "../auth/guard/apple-auth.guard";
-import { JwtAuthGuard } from "../auth/guard/jwt-auth.guard";
+import { AppleAuthGuard } from '../auth/guard/apple-auth.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { CreateUserDto, Test } from './dto/create-use.dto';
+import { UserDecorator } from './decorator/user.decorator';
+import { ValidationPipeNew } from 'src/auth/validations/validation.pipe';
+import { JoiValidationPipe } from 'src/auth/validations/JoiValidationPipe.pipe';
+import { use } from 'passport';
+import { RolesGuard } from 'src/auth/guard/role.guard';
 
 dotenv.config();
 
 @Controller('users')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -44,7 +53,7 @@ export class UsersController {
 
   @Get('authorization')
   //   @UseGuards(JwtAuthGuard)
-  //   @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN)
   @UseInterceptors(ClassSerializerInterceptor)
   async myEnforcement(@Req() req) {
     // const iv = randomBytes(16);
@@ -71,20 +80,25 @@ export class UsersController {
     const saltOrRounds = 10;
     const password = 'random_password';
     const hash = await bcrypt.hash(password, saltOrRounds);
-    console.log(hash)
+    console.log(hash);
     const salt = await bcrypt.genSalt();
-    console.log(salt)
+    console.log(salt);
     const isMatch = await bcrypt.compare(password, hash);
-    console.log(isMatch)
-
+    console.log(isMatch);
 
     return 'Content in here...';
   }
 
   @Get('/test/:id')
-  @UseGuards(JwtAuthGuard)
-  test(@Param('id', ParseIntPipe) id: number, @Req() req : any) {
-    // console.log( req.user)
-    console.log(id);
+  @Roles(Role.ADMIN)
+  // @UsePipes(new JoiValidationPipe(TestSc))
+  test(@Req() req) {
+    // console.log(req)
+    console.log("complete...");
+  }
+
+  @Get('/decorator')
+  getDecorator(@UserDecorator() user: User) {
+    console.log(user);
   }
 }
