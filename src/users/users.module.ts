@@ -18,12 +18,15 @@ import { RolesGuard } from 'src/auth/guard/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { CaslModule } from 'src/casl/casl.module';
+import { testS } from './user.test';
 // import { JwtModule } from '@nestjs/jwt';
 // import {  } from "@nestjs/apple";
 @Module({
   imports: [
     DatabaseModule,
     EmailModule,
+    CaslModule,
     ConfigModule.forRoot(),
     SendGridModule.forRoot({
       apikey: process.env.SEND_GRID_ACCESS_KEY,
@@ -33,6 +36,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
   providers: [
     ...userProviders,
     UsersService,
+    testS,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

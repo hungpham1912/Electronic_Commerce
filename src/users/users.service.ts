@@ -12,6 +12,7 @@ import { EmailService } from '../email/email.service';
 import 'reflect-metadata';
 import { CreateUserDto } from './dto/create-use.dto';
 import * as bcrypt from 'bcrypt';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 
 @Injectable()
 export class UsersService {
@@ -19,11 +20,13 @@ export class UsersService {
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
     private readonly emailService: EmailService,
+    private caslAbilityFactory: CaslAbilityFactory
   ) {}
 
   async findAll() {
     return await this.userRepository.find();
   }
+
 
   async findOne(email: string) {
     const as = await this.userRepository.find({ where: { email: email } });
@@ -41,8 +44,12 @@ export class UsersService {
     } else return null;
   }
 
-  async findById(id: number) {
-    return await this.userRepository.findOne(id);
+   findById(id: number) {
+    const ts =  this.userRepository.findOne(id);
+    
+    return ts;
+   
+    
   }
 
   async changePassword(newPassword: any) {
@@ -92,7 +99,9 @@ export class UsersService {
   }
 
   async test(test: User) {
-    const asd = new User();
+    
+
+    const asd: User = null;
     asd.full_name = test.full_name;
     asd.phone = test.phone;
     asd.email = test.email;

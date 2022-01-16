@@ -22,6 +22,7 @@ import {
 } from 'class-validator';
 import { isString } from 'util';
 import { Oders } from "../oders/oders.entity";
+import { Exclude } from 'class-transformer';
 
 
 export enum Role {
@@ -31,6 +32,11 @@ export enum Role {
 
 @Entity()
 export class User {
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
+
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -54,6 +60,8 @@ export class User {
   @IsNotEmpty()
   adress: string;
 
+
+  // @Exclude()
   @Column()
   @IsNotEmpty()
   @IsString()
@@ -66,8 +74,23 @@ export class User {
   @OneToMany(() => Oders, (order) => order.user,)
   orders: Oders[];
 
-  @AfterInsert()
-  test() {
-    console.log('after insert');
+}
+
+export class Humman{
+  constructor(name, type, sex){
+    this.name = name
+    this.sex = sex
+    this.type = type
   }
+
+  name: string
+
+  type: string
+
+  sex: string
+}
+
+export class Teacher extends Humman{
+
+  job: string
 }

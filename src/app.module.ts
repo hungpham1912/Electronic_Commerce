@@ -9,7 +9,6 @@ import { ProductPricesModule } from './product-prices/product-prices.module';
 import { ProductsModule } from './products/products.module';
 import { ProductImagesModule } from './product-images/product-images.module';
 import { PublicFilesModule } from './public-files/public-files.module';
-import { CaslModule } from './casl/casl.module';
 import { RouterModule } from '@nestjs/core';
 
 @Module({
@@ -24,7 +23,6 @@ import { RouterModule } from '@nestjs/core';
     ProductsModule,
     ProductImagesModule,
     PublicFilesModule,
-    CaslModule,
     RouterModule.register([
       {
         path: 'e-commerce',
