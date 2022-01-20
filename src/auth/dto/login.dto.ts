@@ -1,3 +1,4 @@
+import { IsDefined, IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { Entity } from "typeorm";
 
 
@@ -7,6 +8,18 @@ export class LoginByAppleDto {
   password: string;
 }
 
+export class SigninDto{
+  @IsDefined()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsDefined()
+  @IsString()
+  password: string;
+
+}
 
 export class LoginDto {
  

@@ -1,4 +1,6 @@
 import {
+  CacheInterceptor,
+  CacheModule,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -15,7 +17,7 @@ import { EmailModule } from '../email/email.module';
 import { User } from './users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesGuard } from 'src/auth/guard/role.guard';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { CaslModule } from 'src/casl/casl.module';
@@ -24,6 +26,11 @@ import { testS } from './user.test';
 // import {  } from "@nestjs/apple";
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 5, // seconds
+      max: 10, // maximum number of items in cache
+    }),
+    ConfigModule,
     DatabaseModule,
     EmailModule,
     CaslModule,
@@ -38,9 +45,13 @@ import { testS } from './user.test';
     UsersService,
     testS,
     {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+    {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    }
+    },
   ],
   exports: [UsersService],
 })
@@ -48,11 +59,11 @@ export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes(
-        // { path: 'e-commerce/users/authorization', method: RequestMethod.GET },
-        // { path: 'e-commerce/users/change-password', method: RequestMethod.PUT },
-        // { path: 'e-commerce/users/', method: RequestMethod.GET },
-        // { path: 'e-commerce/users/test/:id', method: RequestMethod.GET },
-      );
+      .forRoutes
+      // { path: 'e-commerce/users/authorization', method: RequestMethod.GET },
+      // { path: 'e-commerce/users/change-password', method: RequestMethod.PUT },
+      // { path: 'e-commerce/users/', method: RequestMethod.GET },
+      // { path: 'e-commerce/users/test/:id', method: RequestMethod.GET },
+      ();
   }
 }

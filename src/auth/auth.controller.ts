@@ -2,8 +2,9 @@ import { Controller, Get, Post, Put, UseGuards, Body, Request, Req } from '@nest
 import { UsersService } from "../users/users.service";
 import { LocalAuthGuard } from "../auth/guard/local-auth.guard";
 import { CreateUserDto } from 'src/users/dto/create-use.dto';
-import { LoginByAppleDto } from './dto/login.dto';
+import { LoginByAppleDto, SigninDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
+import { Public } from './decorator/jwt.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +32,9 @@ export class AuthController {
   
     @Post('signin')
     @UseGuards(LocalAuthGuard)
-    serverRequiestSignin(@Body() body) {
+    @Public()
+    serverRequiestSignin(@Body() body: SigninDto) {
+      console.log(body)
       return this.authService.login(body);
     }
   

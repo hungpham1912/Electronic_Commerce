@@ -3,6 +3,7 @@ import {
   HttpException,
   Inject,
   ConsoleLogger,
+  CACHE_MANAGER,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User, Role } from './users.entity';
@@ -20,7 +21,9 @@ export class UsersService {
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
     private readonly emailService: EmailService,
-    private caslAbilityFactory: CaslAbilityFactory
+    private caslAbilityFactory: CaslAbilityFactory,
+    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
+
   ) {}
 
   async findAll() {
@@ -99,7 +102,7 @@ export class UsersService {
   }
 
   async test(test: User) {
-    
+    // const value = await this.cacheManager.get('key');
 
     const asd: User = null;
     asd.full_name = test.full_name;
