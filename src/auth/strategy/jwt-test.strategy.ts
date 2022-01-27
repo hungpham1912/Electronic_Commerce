@@ -8,7 +8,8 @@ import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 // import { jwtConstants } from './constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy,'user') {
+
+export class JwtTestStrategy extends PassportStrategy(Strategy,'test') {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,7 +19,9 @@ export class JwtStrategy extends PassportStrategy(Strategy,'user') {
   }
 
   async validate(payload: any) {
-    const user = await  this.authService.validateById(payload.id);
-    return user
+    console.log("sdfsfsdfsdfsdfsd")
+    // const contextId = ContextIdFactory.getByRequest(req);
+    // const user = await  this.authService.validateById(payload.id);
+    return payload
   }
 }

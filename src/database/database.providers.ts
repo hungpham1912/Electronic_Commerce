@@ -4,11 +4,11 @@ export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
     useFactory: async () => await createConnection({
-      type: 'postgres',
+      type: 'mysql',
       host: 'localhost',
-      username: 'arul',
-      password: 'root',
-      database: 'codingpub',
+      username: 'hung',
+      password: 'hung1912',
+      database: 'demodb',
       entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
       ],

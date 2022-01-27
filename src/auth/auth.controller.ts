@@ -34,7 +34,7 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Public()
     serverRequiestSignin(@Body() body: SigninDto) {
-      console.log(body)
+      this.authService.qrCode()
       return this.authService.login(body);
     }
   

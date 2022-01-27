@@ -1,17 +1,18 @@
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
+import { Type } from '@nestjs/passport';
 
 import { Test } from 'src/users/dto/create-use.dto';
 
+
+export interface ArgumentMetadata {
+  type: 'body' | 'query' | 'param' | 'custom';
+  metatype?: Type <unknown>;
+  data?: string;
+}
 @Injectable()
 export class ValidationPipeNew implements PipeTransform {
-  transform(value, metadata) {
-    const ds = new Test()
-    // if(Object.keys(value).length!=Object.keys(Test).length){
-    //   throw new BadRequestException('Validation failed');
-    // }
-  
-    console.log(Object.keys(value).length)
-
+  transform(value: any, metadata: ArgumentMetadata) {
+    console.log("🚀 ~ file: validation.pipe.ts ~ line 15 ~ ValidationPipeNew ~ value", value)
     return value;
   }
 }

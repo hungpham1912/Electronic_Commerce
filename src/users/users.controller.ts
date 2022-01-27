@@ -13,6 +13,7 @@ import {
   Res,
   Response,
   ParseIntPipe,
+  MessageEvent,
   UseInterceptors,
   ClassSerializerInterceptor,
   UsePipes,
@@ -23,6 +24,9 @@ import {
   Inject,
   CACHE_MANAGER,
   UploadedFile,
+  HttpException,
+  HttpStatus,
+  Sse,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
@@ -57,6 +61,10 @@ import { Cache } from 'cache-manager';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Cookie } from 'express-session';
+import { Public } from 'src/auth/decorator/jwt.decorator';
+import { JwtTestAuthGuard } from 'src/auth/guard/jwt-test.guard';
+import { interval, map, Observable } from 'rxjs';
+import { LoggingInterceptor } from 'src/auth/interceptor/logging.interceptor';
 
 dotenv.config();
 
@@ -71,11 +79,12 @@ export class OrderCreatedEvent {
 
 @Controller('users')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard, PoliciesGuard)
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(LoggingInterceptor)
 export class UsersController {
   constructor(
     private readonly userService: UsersService,
-    // private caslAbilityFactory: CaslAbilityFactory,
+    private caslAbilityFactory: CaslAbilityFactory,
     private configService: ConfigService,
     private testS: testS,
     private eventEmitter: EventEmitter2,
@@ -104,8 +113,18 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Get('qrcode')
+  qrCode(){
+    
+  }
+
+  @Sse('sse')
+  sse(): Observable<MessageEvent> {
+    return interval(1000).pipe(map((_) => ({ data: { hello: 'world' } })));  
+  }
+
   @Get('authorization')
-  @Roles(Role.ADMIN)
+  // @Roles(Role.ADMIN)
   @UseInterceptors(ClassSerializerInterceptor)
   async myEnforcement(@Req() req) {
     // const iv = randomBytes(16);
@@ -132,18 +151,18 @@ export class UsersController {
     const saltOrRounds = 10;
     const password = 'random_password';
     const hash = await bcrypt.hash(password, saltOrRounds);
-    console.log(hash);
     const salt = await bcrypt.genSalt();
     console.log(salt);
     const isMatch = await bcrypt.compare(password, hash);
-    console.log(isMatch);
 
     return 'Content in here...';
   }
 
+  // @UseGuards(LocalAuthGuard)
+  // @UseGuards( RolesGuard, PoliciesGuard)
   @Get('/test/:id')
-  @UseGuards(JwtAuthGuard)
   // @Roles(Role.ADMIN)
+  // @UsePipes(new ValidationPipeNew())
   // @UsePipes(new JoiValidationPipe(TestSc))
   // @CheckPolicies((ability: AppAbility) =>
   //   ability.can(Action.Manage, User),
@@ -152,28 +171,35 @@ export class UsersController {
     @Req() request,
     @Session() session: Record<string, any>,
     @Param('id') id: number,
+    @Body() body: any,
     // @Cookies('name') name: string
   ) {
-    // const ability = this.caslAbilityFactory.createForUser(req.user);
+    // const ability = this.caslAbilityFactory.createForUser(request.user);
     // // console.log(ability.can(Action.Read, 'all'))
-    // if (ability.can(Action.Manage, 'all')) {
-    // request.session.visits = request.session.visits
-    //   ? request.session.visits + 1
-    //   : 1;
-    // console.log(session);
-    // console.log(request.user);
-    // const host = process.env.ACCESS_TOKEN_SECRET
-    // console.log(host)
-    // console.log(typeof id);
-    // const ude = new UpdateUserDto();
-    // ude.adress = 'Asdasd';
-    // ude.email = 'asdasd';
-    // console.log(ude);
-    // const dbUser = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    // console.log(dbUser)
+    // if (ability.can(Action.Read, 'all')) {
+      // console.log('asdasdasd');
+      // request.session.visits = request.session.visits
+      //   ? request.session.visits + 1
+      //   : 1;
+      // console.log(session);
+      // console.log(request.user);
+      // const host = process.env.ACCESS_TOKEN_SECRET
+      // console.log(host)
+      // console.log(typeof id);
+      // const ude = new UpdateUserDto();
+      // ude.adress = 'Asdasd';
+      // ude.email = 'asdasd';
+      // console.log(ude);
+      // const dbUser = this.configService.get<string>('ACCESS_TOKEN_SECRET');
+      // console.log(dbUser)
     // }
-    console.log(request.cookie)
+    // console.log(request.cookie)
     // await this.cacheManager.set('keyy', 'sdfsfsfsf', { ttl: 1000 });
+    // return request.user
+    // if(id==3){
+    //   throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    // }
+    console.log("typeof id");
   }
 
   @Get('demo/cache')

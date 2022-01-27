@@ -22,6 +22,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { CaslModule } from 'src/casl/casl.module';
 import { testS } from './user.test';
+import { ItcotpService } from 'src/itcotp/itcotp.service';
 // import { JwtModule } from '@nestjs/jwt';
 // import {  } from "@nestjs/apple";
 @Module({
@@ -43,15 +44,16 @@ import { testS } from './user.test';
   providers: [
     ...userProviders,
     UsersService,
+    ItcotpService,
     testS,
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
     },
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
   ],
   exports: [UsersService],
 })

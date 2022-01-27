@@ -14,6 +14,10 @@ import 'reflect-metadata';
 import { CreateUserDto } from './dto/create-use.dto';
 import * as bcrypt from 'bcrypt';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+import * as qrcode from 'qrcode';
+import { Itcotp } from 'src/itcotp/entities/itcotp.entity';
+import { ItcotpService } from 'src/itcotp/itcotp.service';
+import { CreateItcotpDto } from 'src/itcotp/dto/create-itcotp.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,15 +25,14 @@ export class UsersService {
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
     private readonly emailService: EmailService,
-    private caslAbilityFactory: CaslAbilityFactory,
-    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly itcotpService: ItcotpService,
 
+    private caslAbilityFactory: CaslAbilityFactory, // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findAll() {
     return await this.userRepository.find();
   }
-
 
   async findOne(email: string) {
     const as = await this.userRepository.find({ where: { email: email } });
@@ -47,12 +50,10 @@ export class UsersService {
     } else return null;
   }
 
-   findById(id: number) {
-    const ts =  this.userRepository.findOne(id);
-    
+  findById(id: number) {
+    const ts = this.userRepository.findOne(id);
+
     return ts;
-   
-    
   }
 
   async changePassword(newPassword: any) {
@@ -66,26 +67,26 @@ export class UsersService {
   }
 
   async authenticationSignup(infomationSignup: CreateUserDto) {
-    infomationSignup.password =  String(await this.Enncryption(infomationSignup.password ))
-    console.log(await this.Enncryption(infomationSignup.password ))
-    const as = await this.userRepository.find();
-    if (as.length == 0) {
+    infomationSignup.password = String(
+      await this.Enncryption(infomationSignup.password),
+    );
+    const as = await this.findOne(infomationSignup.email);
+
+    if (!as) {
       this.emailService.sendEmail(infomationSignup);
+      const itc: CreateItcotpDto = {
+        reciever_phone: infomationSignup.phone,
+        content: '12345',
+      };
+      this.itcotpService.sendOTP(itc);
       this.userRepository.save(infomationSignup);
       return { error: 200, status: 'OK' };
     } else {
-      const emailExist = await this.userRepository.findOne({
-        where: { email: infomationSignup.email },
-      });
-      if (emailExist == null) {
-        this.emailService.sendEmail(infomationSignup);
-        this.userRepository.save(infomationSignup);
-        return { error: 200, status: 'OK' };
-      } else return { error: 403, status: 'Account alredy exist!!' };
+      return { error: 403, status: 'Account alredy exist!!' };
     }
   }
 
-  async Enncryption(password: string): Promise<string>{
+  async Enncryption(password: string): Promise<string> {
     const saltOrRounds = 10;
     return await bcrypt.hash(password, saltOrRounds);
   }
@@ -100,6 +101,8 @@ export class UsersService {
       return { statusCode: 200, message: 'OK' };
     } else return { statusCode: 404, message: 'Not find email' };
   }
+
+  qrCode() {}
 
   async test(test: User) {
     // const value = await this.cacheManager.get('key');

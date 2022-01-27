@@ -15,6 +15,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ChatgetwayModule } from './chatgetway/chatgetway.module';
 import { Chatgetway } from './chatgetway/entities/chatgetway.entity';
 import { ChatGateway } from './chat.getway';
+import { ItcotpModule } from './itcotp/itcotp.module';
 @Module({
   imports: [
     ConfigModule.forRoot({}),
@@ -51,6 +52,7 @@ import { ChatGateway } from './chat.getway';
         module: UsersModule,
       },
     ]),
+    ItcotpModule,
     
   ],
   providers: [ChatGateway],

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as jwt from 'jsonwebtoken';
 import { OdersService } from '../oders/oders.service';
@@ -6,6 +6,10 @@ import { LoginByAppleDto, LoginDto } from './dto/login.dto';
 import { AppleSignIn } from 'apple-sign-in-rest';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { use } from 'passport';
+import * as qrcode from 'qrcode';
+import * as otplib from 'otplib';
+import * as springedge from 'springedge';
 
 
 @Injectable()
@@ -13,22 +17,64 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private readonly orderService: OdersService,
-    private jwtService: JwtService
-
+    private jwtService: JwtService,
   ) {}
+
+
+  generateUniqueSecret = () => {
+    const { authenticator } = otplib;
+    return authenticator.generateSecret();
+  };
+
+  generateOTPToken = (username, serviceName, secret) => {
+    const { authenticator } = otplib;
+    return authenticator.keyuri(username, serviceName, secret);
+  };
+
+  async qrCode() {
+    const params = {
+      'apikey': '6ojfpx3g160a1vv2279dtl3m42x9qekd', // API Key 
+      'sender': 'SEDEMO', // Sender Name 
+      'to': [
+        '0964816205'  //Moblie Number 
+      ],
+      'message': 'test+message'
+    };
+
+    springedge.messages.send(params, 5000, function (err, response) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+    
+    
+    /** Tạo mã OTP token */
+    // console.log(this.generateOTPToken("we","we","wwe"))
+   
+  }
 
   async validateById(id: number) {
     const user = await this.usersService.findById(id);
-    if(user) return user;
+    if (user) return user;
     return null;
   }
 
   async login(body: any) {
-    const user = await this.usersService.findById(body.id)
-    const payload = { email: user.email, id: user.id };
-    return {...user,...{
-      access_token: this.jwtService.sign(payload),
-    }};
+    const user = await this.usersService.findOne(body.email);
+    if (!user) {
+      throw new HttpException(`Do'nt find email`, 401);
+    } else if (user && body.password != user.password) {
+      throw new HttpException(`Faild password`, 401);
+    } else {
+      const { email, password } = user;
+      const payload = { email: user.email, id: user.id };
+      return {
+        ...user,
+        ...{
+          access_token: this.jwtService.sign(payload),
+        },
+      };
+    }
   }
 
   async validateUserByToken(req: Request, res: Response) {
@@ -50,13 +96,12 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(email);
     switch (true) {
-      case user == null:
+      case !user:
         return { error: 401, message: "Don't find email" };
-      case user != null && user.password != password:
+      case user && user.password != password:
         return { error: 401, message: 'Password failed' };
-      case user != null && user.password == password: {
+      case user && user.password == password:
         return user;
-      }
     }
   }
 
