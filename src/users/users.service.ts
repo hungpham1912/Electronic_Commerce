@@ -1,21 +1,21 @@
 import {
   Injectable,
-  HttpException,
+  // HttpException,
   Inject,
-  ConsoleLogger,
-  CACHE_MANAGER,
+  // ConsoleLogger,
+  // CACHE_MANAGER,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User, Role } from './users.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SendGridService } from '@anchan828/nest-sendgrid';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { SendGridService } from '@anchan828/nest-sendgrid';
 import { EmailService } from '../email/email.service';
 import 'reflect-metadata';
 import { CreateUserDto } from './dto/create-use.dto';
 import * as bcrypt from 'bcrypt';
-import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
-import * as qrcode from 'qrcode';
-import { Itcotp } from 'src/itcotp/entities/itcotp.entity';
+// import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+// import * as qrcode from 'qrcode';
+// import { Itcotp } from 'src/itcotp/entities/itcotp.entity';
 import { ItcotpService } from 'src/itcotp/itcotp.service';
 import { CreateItcotpDto } from 'src/itcotp/dto/create-itcotp.dto';
 
@@ -27,7 +27,7 @@ export class UsersService {
     private readonly emailService: EmailService,
     private readonly itcotpService: ItcotpService,
 
-    private caslAbilityFactory: CaslAbilityFactory, // @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    // private caslAbilityFactory: CaslAbilityFactory, // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findAll() {
@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   async findOne(email: string) {
-    const as = await this.userRepository.find({ where: { email: email } });
+    const as = await this.userRepository?.find({ where: { email: email } });
     if (as.length > 0) {
       const User = {
         id: as[0].id,
@@ -52,7 +52,6 @@ export class UsersService {
 
   findById(id: number) {
     const ts = this.userRepository.findOne(id);
-
     return ts;
   }
 
@@ -102,19 +101,4 @@ export class UsersService {
     } else return { statusCode: 404, message: 'Not find email' };
   }
 
-  qrCode() {}
-
-  async test(test: User) {
-    // const value = await this.cacheManager.get('key');
-
-    const asd: User = null;
-    asd.full_name = test.full_name;
-    asd.phone = test.phone;
-    asd.email = test.email;
-    asd.adress = test.adress;
-    asd.password = test.password;
-    asd.role = Role.USER;
-    console.log(asd);
-    this.userRepository.save(asd);
-  }
 }

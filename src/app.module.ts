@@ -16,6 +16,8 @@ import { ChatgetwayModule } from './chatgetway/chatgetway.module';
 import { Chatgetway } from './chatgetway/entities/chatgetway.entity';
 import { ChatGateway } from './chat.getway';
 import { ItcotpModule } from './itcotp/itcotp.module';
+import { PetsModule } from './pets/pets.module';
+import { OtpModule } from './module/otp/otp.module';
 @Module({
   imports: [
     ConfigModule.forRoot({}),
@@ -53,6 +55,8 @@ import { ItcotpModule } from './itcotp/itcotp.module';
       },
     ]),
     ItcotpModule,
+    PetsModule,
+    OtpModule,
     
   ],
   providers: [ChatGateway],

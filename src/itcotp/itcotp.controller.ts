@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ItcotpService } from './itcotp.service';
 import { CreateItcotpDto } from './dto/create-itcotp.dto';
 import { UpdateItcotpDto } from './dto/update-itcotp.dto';
@@ -12,6 +20,4 @@ export class ItcotpController {
     // console.log('test')
     return this.itcotpService.sendOTP(createItcotpDto);
   }
-
-  
 }

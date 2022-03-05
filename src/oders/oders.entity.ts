@@ -29,22 +29,18 @@ export class Oders {
   id: number;
 
   @Column()
-  @IsNotEmpty()
-  @IsString()
   status: string;
 
   @Column()
-  @IsNotEmpty()
-  @IsString()
   phone: string;
 
   @ManyToOne(() => User, (user) => user.id, {
     eager: true,
   })
-  @JoinColumn({
-    name: 'userId',
-    referencedColumnName: 'id',
-  })
+  // @JoinColumn({
+  //   name: 'userId',
+  //   referencedColumnName: 'id',
+  // })
   user: User;
   userId: number
   

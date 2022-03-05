@@ -7,6 +7,7 @@ import { ProductPricesService } from "../product-prices/product-prices.service";
 import { ProductsService } from "../products/products.service";
 import { StoresService } from "../stores/stores.service";
 import { Oders } from 'src/oders/oders.entity';
+import { CreateOrderItemsDto } from './dto/create-orderItem.dto';
 @Injectable()
 export class OderItemsService {
     constructor(
@@ -23,17 +24,10 @@ export class OderItemsService {
         return this.oderItemsRepository.find()
     }
 
-    async addPoductForCart(item: OderItems) {
-       
-    }
 
-    async addOrderItem(item: OderItems) {
-        const result = await this.oderItemsRepository
-            .createQueryBuilder()
-            .insert()
-            .values({ ...item })
-            .execute()
-        return { statusCode: 200, message: "OK" }
+    async addOrderItem(item: CreateOrderItemsDto) {
+        const result = await this.oderItemsRepository.create(item)
+        return await this.oderItemsRepository.save(result)
     }
 
     async updateQuantityOrderItems(quantitty: number, id: number) {

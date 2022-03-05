@@ -37,13 +37,11 @@ export class OderItems {
   @IsNotEmpty()
   quantity: number;
 
-  @Column({ nullable: true })
-  @IsNotEmpty()
-  @IsNumber()
+  @Column({ nullable: false })
   productPricesId: number;
 
   @Column()
-  orderId: number
+  orderId: number;
 
   @ManyToOne((type) => Oders, (oder) => oder.orderItems)
   @JoinColumn({
@@ -52,13 +50,16 @@ export class OderItems {
   })
   order: Oders;
 
-  @ManyToOne((type) => ProductPrices, (productPrices) => productPrices.oder_Items,{
-    eager: true
-})
+  @ManyToOne(
+    (type) => ProductPrices,
+    (productPrices) => productPrices.oder_Items,
+    {
+      eager: true,
+    },
+  )
   @JoinColumn({
     name: 'productPricesId',
     referencedColumnName: 'id',
   })
   productPrices: ProductPrices;
-  
 }

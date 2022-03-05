@@ -26,6 +26,13 @@ export class OdersService {
 
   findAll() {
     return this.oderRepository.find()
+
+  }
+
+  getCondition(){
+    return this.oderRepository.createQueryBuilder('oders')
+    . where ( "oders.userId = :id" ,  {  id : 1  } )
+    . getMany ( ) ;
   }
 
   async getOrderByUserId(userId: number) {

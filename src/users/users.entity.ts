@@ -21,9 +21,8 @@ import {
   validate,
 } from 'class-validator';
 import { isString } from 'util';
-import { Oders } from "../oders/oders.entity";
+import { Oders } from '../oders/oders.entity';
 import { Exclude } from 'class-transformer';
-
 
 export enum Role {
   ADMIN = 'admin',
@@ -35,7 +34,6 @@ export class User {
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
   }
-
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -50,7 +48,7 @@ export class User {
   @IsString()
   phone: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsNotEmpty()
   @IsEmail()
   @ValidateIf((o) => o.email == '')
@@ -59,7 +57,6 @@ export class User {
   @Column()
   @IsNotEmpty()
   adress: string;
-
 
   // @Exclude()
   @Column()
@@ -71,26 +68,24 @@ export class User {
   @IsNotEmpty()
   role: Role;
 
-  @OneToMany(() => Oders, (order) => order.user,)
+  @OneToMany(() => Oders, (order) => order.user)
   orders: Oders[];
-
 }
 
-export class Humman{
-  constructor(name, type, sex){
-    this.name = name
-    this.sex = sex
-    this.type = type
+export class Humman {
+  constructor(name, type, sex) {
+    this.name = name;
+    this.sex = sex;
+    this.type = type;
   }
 
-  name: string
+  name: string;
 
-  type: string
+  type: string;
 
-  sex: string
+  sex: string;
 }
 
-export class Teacher extends Humman{
-
-  job: string
+export class Teacher extends Humman {
+  job: string;
 }

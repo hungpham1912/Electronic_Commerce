@@ -9,8 +9,10 @@ import { JwtService } from '@nestjs/jwt';
 import { use } from 'passport';
 import * as qrcode from 'qrcode';
 import * as otplib from 'otplib';
-import * as springedge from 'springedge';
+import * as bcrypt from 'bcrypt';
 
+import * as springedge from 'springedge';
+const otpGenerator = require('otp-generator');
 
 @Injectable()
 export class AuthService {
@@ -20,37 +22,21 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-
-  generateUniqueSecret = () => {
-    const { authenticator } = otplib;
-    return authenticator.generateSecret();
-  };
-
-  generateOTPToken = (username, serviceName, secret) => {
-    const { authenticator } = otplib;
-    return authenticator.keyuri(username, serviceName, secret);
-  };
-
   async qrCode() {
-    const params = {
-      'apikey': '6ojfpx3g160a1vv2279dtl3m42x9qekd', // API Key 
-      'sender': 'SEDEMO', // Sender Name 
-      'to': [
-        '0964816205'  //Moblie Number 
-      ],
-      'message': 'test+message'
-    };
-
-    springedge.messages.send(params, 5000, function (err, response) {
-      if (err) {
-        return console.log(err);
-      }
+    otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
     });
-    
-    
+    console.log(
+      otpGenerator.generate(6, {
+        specialChars: false,
+        digits: true,
+        lowerCaseAlphabets: false,
+        upperCaseAlphabets: false,
+      }),
+    );
     /** Tạo mã OTP token */
     // console.log(this.generateOTPToken("we","we","wwe"))
-   
   }
 
   async validateById(id: number) {
@@ -61,10 +47,15 @@ export class AuthService {
 
   async login(body: any) {
     const user = await this.usersService.findOne(body.email);
+    const checkPass = await bcrypt.compare(body.password, user.password);
+    console.log(
+      '🚀 ~ file: auth.service.ts ~ line 43 ~ AuthService ~ checkPass',
+      checkPass,
+    );
     if (!user) {
-      throw new HttpException(`Do'nt find email`, 401);
-    } else if (user && body.password != user.password) {
-      throw new HttpException(`Faild password`, 401);
+      throw new HttpException(`Don't find email`, 401);
+    } else if (user && !checkPass) {
+      throw new HttpException(`Password failed`, 401);
     } else {
       const { email, password } = user;
       const payload = { email: user.email, id: user.id };
@@ -85,7 +76,7 @@ export class AuthService {
       const /*String*/ token = authorizationHeader.split(' ')[1];
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if (err) {
-          return { error: 403, message: 'Token faild' };
+          return { error: 403, message: 'Token failed' };
         } else {
           return;
         }

@@ -3,70 +3,71 @@ import {
   UseGuards,
   Get,
   Post,
-  Delete,
-  Put,
+  // Delete,
+  // Put,
   Body,
   Param,
-  Header,
+  // Header,
   Req,
-  Request,
-  Res,
-  Response,
-  ParseIntPipe,
+  // Request,
+  // Res,
+  // Response,
+  // ParseIntPipe,
   MessageEvent,
   UseInterceptors,
   ClassSerializerInterceptor,
-  UsePipes,
-  ValidationPipe,
+  // UsePipes,
+  // ValidationPipe,
   SerializeOptions,
   Session,
   Render,
   Inject,
   CACHE_MANAGER,
   UploadedFile,
-  HttpException,
-  HttpStatus,
+  // HttpException,
+  // HttpStatus,
   Sse,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
+// import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
 import * as dotenv from 'dotenv';
 import { Humman, Role, Teacher, User } from './users.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/role/role.decorator';
-import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
+// import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 import * as bcrypt from 'bcrypt';
-import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
-import { AppleAuthGuard } from '../auth/guard/apple-auth.guard';
+// import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
+// import { promisify } from 'util';
+// import { AppleAuthGuard } from '../auth/guard/apple-auth.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { CreateUserDto } from './dto/create-use.dto';
-import { UserDecorator } from './decorator/user.decorator';
-import { ValidationPipeNew } from 'src/auth/validations/validation.pipe';
-import { JoiValidationPipe } from 'src/auth/validations/JoiValidationPipe.pipe';
-import { use } from 'passport';
+// import { CreateUserDto } from './dto/create-use.dto';
+// import { UserDecorator } from './decorator/user.decorator';
+// import { ValidationPipeNew } from 'src/auth/validations/validation.pipe';
+// import { JoiValidationPipe } from 'src/auth/validations/JoiValidationPipe.pipe';
+// import { use } from 'passport';
+
 import { RolesGuard } from 'src/auth/guard/role.guard';
-import {
-  CaslAbilityFactory,
-  Action,
-  AppAbility,
-} from 'src/casl/casl-ability.factory';
-import { CheckPolicies } from 'src/auth/policies/check-policies';
+// import {
+//   CaslAbilityFactory,
+//   Action,
+//   AppAbility,
+// } from 'src/casl/casl-ability.factory';
+// import { CheckPolicies } from 'src/auth/policies/check-policies';
 import { PoliciesGuard } from 'src/auth/guard/policies.guard';
-import { testS } from './user.test';
-import { ConfigService } from '@nestjs/config';
-import { UpdateUserDto } from './dto/update-user.dto';
+// import { testS } from './user.test';
+// import { ConfigService } from '@nestjs/config';
+// import { UpdateUserDto } from './dto/update-user.dto';
 import { Cache } from 'cache-manager';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Cookie } from 'express-session';
-import { Public } from 'src/auth/decorator/jwt.decorator';
-import { JwtTestAuthGuard } from 'src/auth/guard/jwt-test.guard';
+// import { Cookie } from 'express-session';
+// import { Public } from 'src/auth/decorator/jwt.decorator';
+// import { JwtTestAuthGuard } from 'src/auth/guard/jwt-test.guard';
 import { interval, map, Observable } from 'rxjs';
-import { LoggingInterceptor } from 'src/auth/interceptor/logging.interceptor';
-
-dotenv.config();
+import { UserDecorator } from './decorator/user.decorator';
+// import { LoggingInterceptor } from 'src/auth/interceptor/logging.interceptor';
+// dotenv.config();
 
 export class OrderCreatedEvent {
   constructor(Id) {
@@ -80,13 +81,12 @@ export class OrderCreatedEvent {
 @Controller('users')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(LoggingInterceptor)
+// @UseInterceptors(LoggingInterceptor)
 export class UsersController {
   constructor(
     private readonly userService: UsersService,
-    private caslAbilityFactory: CaslAbilityFactory,
-    private configService: ConfigService,
-    private testS: testS,
+    // private caslAbilityFactory: CaslAbilityFactory,
+    // private configService: ConfigService,
     private eventEmitter: EventEmitter2,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -113,14 +113,9 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get('qrcode')
-  qrCode(){
-    
-  }
-
   @Sse('sse')
   sse(): Observable<MessageEvent> {
-    return interval(1000).pipe(map((_) => ({ data: { hello: 'world' } })));  
+    return interval(1000).pipe(map((_) => ({ data: { hello: 'world' } })));
   }
 
   @Get('authorization')
@@ -159,9 +154,9 @@ export class UsersController {
   }
 
   // @UseGuards(LocalAuthGuard)
-  // @UseGuards( RolesGuard, PoliciesGuard)
+  @UseGuards(RolesGuard, PoliciesGuard)
   @Get('/test/:id')
-  // @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN)
   // @UsePipes(new ValidationPipeNew())
   // @UsePipes(new JoiValidationPipe(TestSc))
   // @CheckPolicies((ability: AppAbility) =>
@@ -177,21 +172,21 @@ export class UsersController {
     // const ability = this.caslAbilityFactory.createForUser(request.user);
     // // console.log(ability.can(Action.Read, 'all'))
     // if (ability.can(Action.Read, 'all')) {
-      // console.log('asdasdasd');
-      // request.session.visits = request.session.visits
-      //   ? request.session.visits + 1
-      //   : 1;
-      // console.log(session);
-      // console.log(request.user);
-      // const host = process.env.ACCESS_TOKEN_SECRET
-      // console.log(host)
-      // console.log(typeof id);
-      // const ude = new UpdateUserDto();
-      // ude.adress = 'Asdasd';
-      // ude.email = 'asdasd';
-      // console.log(ude);
-      // const dbUser = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-      // console.log(dbUser)
+    // console.log('asdasdasd');
+    // request.session.visits = request.session.visits
+    //   ? request.session.visits + 1
+    //   : 1;
+    // console.log(session);
+    // console.log(request.user);
+    // const host = process.env.ACCESS_TOKEN_SECRET
+    // console.log(host)
+    // console.log(typeof id);
+    // const ude = new UpdateUserDto();
+    // ude.adress = 'Asdasd';
+    // ude.email = 'asdasd';
+    // console.log(ude);
+    // const dbUser = this.configService.get<string>('ACCESS_TOKEN_SECRET');
+    // console.log(dbUser)
     // }
     // console.log(request.cookie)
     // await this.cacheManager.set('keyy', 'sdfsfsfsf', { ttl: 1000 });
@@ -199,7 +194,7 @@ export class UsersController {
     // if(id==3){
     //   throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     // }
-    console.log("typeof id");
+    console.log('typeof id');
   }
 
   @Get('demo/cache')
@@ -231,6 +226,8 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file.buffer);
+    const base64String = btoa(String.fromCharCode(...new Uint8Array()));
+    return file;
   }
 
   @Get('demo/mvc')

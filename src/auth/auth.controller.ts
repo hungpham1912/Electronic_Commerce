@@ -31,10 +31,10 @@ export class AuthController {
     }
   
     @Post('signin')
-    @UseGuards(LocalAuthGuard)
+    // @UseGuards(LocalAuthGuard)
     @Public()
     serverRequiestSignin(@Body() body: SigninDto) {
-      this.authService.qrCode()
+      // this.authService.qrCode()
       return this.authService.login(body);
     }
   
