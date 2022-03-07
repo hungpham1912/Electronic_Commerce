@@ -11,6 +11,11 @@ export class ProductPricesService {
         private ProducPriceRepository: Repository<ProductPrices>,
     ){}
     
+    async findAll(){
+        return this.ProducPriceRepository.find()
+    }
+
+
     async findByProducPriceById(productPricesId: number){
         const as = await this.ProducPriceRepository
         .createQueryBuilder()

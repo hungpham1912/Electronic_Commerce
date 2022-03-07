@@ -1,26 +1,33 @@
-import { Body, Controller,Delete,Get,Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { OderItemsService } from './oder-items.service';
-import { ProductPrices } from "../product-prices/product-prices.entity";
-import { OderItems } from "./oder-items.entity";
-import { User } from "../users/users.entity";
-@Controller('oder-items')
+import { ProductPrices } from '../product-prices/product-prices.entity';
+import { OderItems } from './oder-items.entity';
+import { User } from '../users/users.entity';
+import { CreateOrderItemsDto } from './dto/create-orderItem.dto';
+@Controller('order-items')
 export class OderItemsController {
-    constructor(private readonly OderItemMethod: OderItemsService) { }
-    
+  constructor(private readonly OderItemMethod: OderItemsService) {}
 
-    @Post()
-    addPoductPriceForCart(@Body() item :OderItems ){
-        return this.OderItemMethod.addPoductForCart(item);
-    }
+  @Get()
+  getAll(@Param() param: any) {
+    return this.OderItemMethod.findAll();
+  }
 
-    @Delete()
-    deleteProductPriceForCart(@Body() ids: any){
-        return this.OderItemMethod.deleteItemInCart(ids);
-    }
+  @Post()
+  addPoductPriceForCart(@Body() item: CreateOrderItemsDto) {
+    return this.OderItemMethod.addOrderItem(item);
+  }
 
-    @Get('/:userId')
-    getCart(@Param() param:any, @Body() UserDs: User ){
-        return this.OderItemMethod.getOrderItemForCart(param.userId);
-    }
-
+  @Delete()
+  deleteProductPriceForCart(@Body() ids: any) {
+    return this.OderItemMethod.deleteItemInCart(ids);
+  }
 }

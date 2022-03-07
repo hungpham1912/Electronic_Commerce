@@ -16,6 +16,7 @@
     "adress":"Thanh Xuan - Ha Dong"
 }
 
+
 //Login
 
 {
@@ -23,6 +24,11 @@
 	"password": "123456",
 }
 
+
+{
+	"email": "dovietlong@gmail.com",
+	"password": "123123",
+}
 
 
 //Product

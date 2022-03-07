@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { SendGridService } from '@anchan828/nest-sendgrid';
+import { CreateUserDto } from 'src/users/dto/create-use.dto';
 
 @Injectable()
 export class EmailService {
     constructor(
         private readonly sendGrid: SendGridService
     ) { }
-    async sendEmail(infomationSignup: any) {
+    async sendEmail(infomationSignup: CreateUserDto) {
         await this.sendGrid.send({
             to: infomationSignup.email,
             from: process.env.FROM_EMAIL,
             subject: "User Created",
-            text: `Hello ${infomationSignup.name}, your user created with success`,
+            text: `Hello ${infomationSignup.full_name}, your user created with success`,
             html: `<button onclick="confirm()">Confirm</button>
             <script>
             </script>`

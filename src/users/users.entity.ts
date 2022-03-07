@@ -5,6 +5,7 @@ import {
   BaseEntity,
   AfterLoad,
   AfterInsert,
+  OneToMany,
 } from 'typeorm';
 import {
   IsLatLong,
@@ -20,6 +21,8 @@ import {
   validate,
 } from 'class-validator';
 import { isString } from 'util';
+import { Oders } from '../oders/oders.entity';
+import { Exclude } from 'class-transformer';
 
 export enum Role {
   ADMIN = 'admin',
@@ -28,6 +31,10 @@ export enum Role {
 
 @Entity()
 export class User {
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,7 +48,7 @@ export class User {
   @IsString()
   phone: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsNotEmpty()
   @IsEmail()
   @ValidateIf((o) => o.email == '')
@@ -51,17 +58,34 @@ export class User {
   @IsNotEmpty()
   adress: string;
 
+  // @Exclude()
   @Column()
   @IsNotEmpty()
   @IsString()
   password: string;
 
-  @Column()
-  @IsNumber()
-  level: number;
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  @IsNotEmpty()
+  role: Role;
 
-  @AfterInsert()
-  test() {
-    console.log('after insert');
+  @OneToMany(() => Oders, (order) => order.user)
+  orders: Oders[];
+}
+
+export class Humman {
+  constructor(name, type, sex) {
+    this.name = name;
+    this.sex = sex;
+    this.type = type;
   }
+
+  name: string;
+
+  type: string;
+
+  sex: string;
+}
+
+export class Teacher extends Humman {
+  job: string;
 }

@@ -1,6 +1,13 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber, isPhoneNumber } from "class-validator";
+import { IsDefined, IsEmail, IsNotEmpty, IsPhoneNumber, isPhoneNumber, IsString } from "class-validator";
+import { clearScreenDown } from "readline";
 
 
+export class Test{
+    // @IsString()
+    // @IsDefined()
+    // @IsNotEmpty()
+    test: string
+}
 export class CreateUserDto{
     @IsNotEmpty()
     @IsEmail()
@@ -15,10 +22,7 @@ export class CreateUserDto{
     @IsNotEmpty()
     password: string
 
-    @IsPhoneNumber()
+    @IsPhoneNumber('VN')
     phone: string
-
-    @IsNotEmpty()
-    level: number
 
 }

@@ -5,8 +5,9 @@ import { DatabaseModule } from '../database/database.module';
 import { odersProviders } from './oders.providers'
 
 import { LoggerMiddleware } from "../middleware/logger.middleware";
+import { UsersModule } from 'src/users/users.module';
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, UsersModule],
   controllers: [OdersController],
   providers: [
     ...odersProviders,

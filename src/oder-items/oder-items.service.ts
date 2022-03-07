@@ -7,6 +7,7 @@ import { ProductPricesService } from "../product-prices/product-prices.service";
 import { ProductsService } from "../products/products.service";
 import { StoresService } from "../stores/stores.service";
 import { Oders } from 'src/oders/oders.entity';
+import { CreateOrderItemsDto } from './dto/create-orderItem.dto';
 @Injectable()
 export class OderItemsService {
     constructor(
@@ -18,30 +19,15 @@ export class OderItemsService {
         private readonly StoresService: StoresService,
     ) { }
 
-    async addPoductForCart(item: OderItems) {
-        const oderId: number = item.oderId;
-        const productPricesId: number = item.productPricesId;
 
-        const checkOderItem = await this.checkOrderItemExist(oderId, productPricesId);
-
-        if (checkOderItem == null) {
-            return await this.addOrderItem(item);
-        }
-        else {
-            const quantity: number = item.quantity + checkOderItem.quantity;
-            const id: number = checkOderItem.id;
-
-            return await this.updateQuantityOrderItems(quantity, id);
-        }
+    async findAll(){
+        return this.oderItemsRepository.find()
     }
 
-    async addOrderItem(item: OderItems) {
-        const result = await this.oderItemsRepository
-            .createQueryBuilder()
-            .insert()
-            .values({ ...item })
-            .execute()
-        return { statusCode: 200, message: "OK" }
+
+    async addOrderItem(item: CreateOrderItemsDto) {
+        const result = await this.oderItemsRepository.create(item)
+        return await this.oderItemsRepository.save(result)
     }
 
     async updateQuantityOrderItems(quantitty: number, id: number) {

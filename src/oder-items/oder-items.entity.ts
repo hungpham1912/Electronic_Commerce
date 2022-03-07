@@ -37,20 +37,29 @@ export class OderItems {
   @IsNotEmpty()
   quantity: number;
 
-  @Column({ nullable: true })
-  @IsNotEmpty()
-  @IsNumber()
+  @Column({ nullable: false })
   productPricesId: number;
 
-  @Column({ nullable: true })
-  @IsNumber()
-  @IsNotEmpty()
-  oderId: number;
+  @Column()
+  orderId: number;
 
-  @ManyToOne((type) => Oders, (oder) => oder.id)
-  Oder: Oders;
+  @ManyToOne((type) => Oders, (oder) => oder.orderItems)
+  @JoinColumn({
+    name: 'orderId',
+    referencedColumnName: 'id',
+  })
+  order: Oders;
 
-  @ManyToOne((type) => ProductPrices, (productPrices) => productPrices.id)
-  @JoinColumn()
+  @ManyToOne(
+    (type) => ProductPrices,
+    (productPrices) => productPrices.oder_Items,
+    {
+      eager: true,
+    },
+  )
+  @JoinColumn({
+    name: 'productPricesId',
+    referencedColumnName: 'id',
+  })
   productPrices: ProductPrices;
 }

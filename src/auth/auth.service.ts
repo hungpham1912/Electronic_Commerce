@@ -1,42 +1,170 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as jwt from 'jsonwebtoken';
-import { OdersService } from "../oders/oders.service";
-import { LoginDto } from "./dto/login.dto";
+import { OdersService } from '../oders/oders.service';
+import { LoginByAppleDto, LoginDto } from './dto/login.dto';
+import { AppleSignIn } from 'apple-sign-in-rest';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
 import { use } from 'passport';
+import * as qrcode from 'qrcode';
+import * as otplib from 'otplib';
+import * as bcrypt from 'bcrypt';
+
+import * as springedge from 'springedge';
+const otpGenerator = require('otp-generator');
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private readonly orderService: OdersService
-  ) { }
+    private readonly orderService: OdersService,
+    private jwtService: JwtService,
+  ) {}
+
+  async qrCode() {
+    otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+    console.log(
+      otpGenerator.generate(6, {
+        specialChars: false,
+        digits: true,
+        lowerCaseAlphabets: false,
+        upperCaseAlphabets: false,
+      }),
+    );
+    /** Tạo mã OTP token */
+    // console.log(this.generateOTPToken("we","we","wwe"))
+  }
+
+  async validateById(id: number) {
+    const user = await this.usersService.findById(id);
+    if (user) return user;
+    return null;
+  }
+
+  async login(body: any) {
+    const user = await this.usersService.findOne(body.email);
+    const checkPass = await bcrypt.compare(body.password, user.password);
+    console.log(
+      '🚀 ~ file: auth.service.ts ~ line 43 ~ AuthService ~ checkPass',
+      checkPass,
+    );
+    if (!user) {
+      throw new HttpException(`Don't find email`, 401);
+    } else if (user && !checkPass) {
+      throw new HttpException(`Password failed`, 401);
+    } else {
+      const { email, password } = user;
+      const payload = { email: user.email, id: user.id };
+      return {
+        ...user,
+        ...{
+          access_token: this.jwtService.sign(payload),
+        },
+      };
+    }
+  }
+
+  async validateUserByToken(req: Request, res: Response) {
+    const authorizationHeader = req.headers['authorization'];
+    if (authorizationHeader == null) {
+      return { error: 401, message: `Do'nt find token` };
+    } else {
+      const /*String*/ token = authorizationHeader.split(' ')[1];
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+        if (err) {
+          return { error: 403, message: 'Token failed' };
+        } else {
+          return;
+        }
+      });
+    }
+  }
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(email);
     switch (true) {
-      case (user == null): return { error: 401, };
-      case ((user != null) && (user.password != password)): return { error: 401, };
-      case ((user != null) && (user.password == password)): {
-        const userAccessToken = { accessToken: jwt.sign(user, process.env.ACCESS_TOKEN_SECRET), }
-        const odered = await this.orderService.getOrderByUserId(user.id)
-        const LoginUser: LoginDto = {
-          userId: user.id,
-          full_name: user.full_name,
-          phone: user.phone,
-          email: user.email,
-          adress: user.adress,
-          password: user.password,
-          level: user.level,
-          accessToken: userAccessToken.accessToken,
-          orderId: odered.id,
-        }
-
-        return LoginUser;
-      }
+      case !user:
+        return { error: 401, message: "Don't find email" };
+      case user && user.password != password:
+        return { error: 401, message: 'Password failed' };
+      case user && user.password == password:
+        return user;
     }
   }
 
+  async loginByApple(inf: LoginByAppleDto) {
+    const appleSignIn = new AppleSignIn({
+      /**
+       * The clientId depends on that login "flow" you trying to create:
+       *   - "web login" - this is the "serviceId"
+       *   - "ios login" - this is the app "bundleId", choose only this if you trying to
+       *                   verify user that has signed into using the native iOS way
+       *
+       */
+      clientId: 'com.my-company.my-app',
+      teamId: '5B645323E8',
+      keyIdentifier: 'U3B842SVGC',
+      privateKey: '-----BEGIN PRIVATE KEY-----\nMIGTAgEHIHMJKJyqGSM32AgEGC...',
+      // or instead of privateKey use privateKeyPath to read key from file
+      privateKeyPath: '/Users/arnold/my-project/credentials/AuthKey.p8',
+    });
 
+    const authorizationUrl = appleSignIn.getAuthorizationUrl({
+      scope: ['name', 'email'],
+      redirectUri: 'http://localhost:3001/auth/apple/callback',
+      // (Optional) Value of the anti-forgery unique session token, as well as any other information needed to recover the context when the user returns to your application, e.g., the starting URL.
+      state: '123',
+      // (Optional) A random value generated by your app that enables replay protection when present.
+      nonce: 'insert-generated-uuid',
+    });
+  }
 
+  async getAccessToken(req: any) {
+    console.log('asdasd');
+    const code = req.query.code;
+    const state = req.query.state;
+    console.log(code);
+    const appleSignIn = new AppleSignIn({
+      /**
+       * The clientId depends on that login "flow" you trying to create:
+       *   - "web login" - this is the "serviceId"
+       *   - "ios login" - this is the app "bundleId", choose only this if you trying to
+       *                   verify user that has signed into using the native iOS way
+       *
+       */
+      clientId: 'com.my-company.my-app',
+      teamId: '5B645323E8',
+      keyIdentifier: 'U3B842SVGC',
+      privateKey: '-----BEGIN PRIVATE KEY-----\nMIGTAgEHIHMJKJyqGSM32AgEGC...',
+      // or instead of privateKey use privateKeyPath to read key from file
+      privateKeyPath: '/Users/arnold/my-project/credentials/AuthKey.p8',
+    });
+    // This depends how you implemented the storing "state"
+    if (req.session.state && req.session.state !== state) {
+      throw new Error('Missing or invalid state');
+    }
+    const clientSecret = appleSignIn.createClientSecret({
+      /**
+       * Optionaly you can set the validity duration of the secret in seconds. Apple allows the secret to up to 6 months,
+       * but if you are creating a clientSecret per request basis you can set your own expiration duration.
+       * Defaults to 6 months.
+       */
+      expirationDuration: 5 * 60, // 5 minutes
+    });
 
+    const tokenResponse = await appleSignIn.getAuthorizationToken(
+      clientSecret,
+      code,
+      {
+        // Optional, use the same value which you passed to authorisation URL. In case of iOS you skip the value
+        redirectUri: 'http://localhost:3002/auth/apple/callback',
+      },
+    );
+
+    console.log(tokenResponse);
+  }
 }
